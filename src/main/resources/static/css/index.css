@@ -21,7 +21,7 @@
 }
 
 .brand-name {
-    font-family: "Gallient";
+    font-family: "Montserrat-Light";
     font-size: 2.0rem;
     font-weight: bold;
 }
@@ -36,7 +36,7 @@
 }
 
 .login {
-  font-family: "Gallient";
+  font-family: "Montserrat-Light";
   font-size: 1.8rem;
   font-weight: bold;
   line-height: 18px;
@@ -73,7 +73,7 @@
 }
 
 .big-heading {
-    font-family: Gallient;
+    font-family: "Gallient";
     font-style: normal;
     font-size: 6.0rem;
 }
@@ -89,7 +89,7 @@
 
  .modal-title {
     color: #ff4c68;
-    font-family: "Gallient";
+    font-family: "Montserrat";
     font-weight: 800px;
     font-size: 1.8rem;
  }
