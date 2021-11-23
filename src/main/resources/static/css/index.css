@@ -1,0 +1,95 @@
+@font-face {
+  font-family: 'Gallient';
+  src: url('fonts/GallientRegular-eZoMp.woff') format('woff');
+  }
+
+#heading {
+  background-color: #ff4c68;
+  color: #fff;
+}
+
+.container-fluid{
+  padding: 2% 7% 0% 7%;
+}
+
+#navigationBar {
+  padding-bottom: 0%;
+}
+
+.navbar {
+  padding: 0 0 2.0rem;
+}
+
+.brand-name {
+    font-family: "Gallient";
+    font-size: 2.0rem;
+    font-weight: bold;
+}
+
+.nav-item {
+  padding: 0 18px;
+}
+
+.nav-link {
+  font-size: 1.2rem;
+  font-family: "Montserrat-Light";
+}
+
+.login {
+  font-family: "Gallient";
+  font-size: 1.8rem;
+  font-weight: bold;
+  line-height: 18px;
+  text-align: center;
+  border-radius: 20px;
+  width: 150px;
+  height: 40px;
+  background: #ff4c68;
+  border-color: #ff4c68;
+}
+
+.login:hover {
+  color: #FFADAD;
+  background: #ff4c68;
+  border-color: #ff4c68;
+}
+
+#heading .row {
+    right: 0px;
+}
+
+.title-heading {
+    text-align: center;
+    line-height: 1.5;
+    padding: 130px 0px 100px 0px;
+}
+
+.heading {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 2.5rem;
+    text-transform: uppercase;
+}
+
+.big-heading {
+    font-family: Gallient;
+    font-style: normal;
+    font-size: 6.0rem;
+}
+
+.image-holder{
+    display: flex;
+    justify-content: center;
+}
+
+.title-image {
+    width:100%;
+ }
+
+ .modal-title {
+    color: #ff4c68;
+    font-family: "Gallient";
+    font-weight: 800px;
+    font-size: 1.8rem;
+ }
