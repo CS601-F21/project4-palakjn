@@ -37,8 +37,7 @@ public class DashboardController {
         }
 
         model.addAttribute("name", name);
-        model.addAttribute("logout", "/" + userId + "/logout");
-        model.addAttribute("eventUrl", "/" + userId + "/events");
+        model.addAttribute("userId", userId);
         return "home";
     }
 }

@@ -50,3 +50,17 @@
     background: #ff4c68;
     border-color: #ff4c68;
 }
+
+#events .card-column {
+     box-shadow: 0 0 10px 0 rgba(100, 100, 100, 0.26);
+}
+
+#events .card-column {
+    padding-top: 30px;
+ }
+
+ #events .client-info {
+  margin-bottom: 0px;
+  font-size: 15px;
+  text-align: center;
+}

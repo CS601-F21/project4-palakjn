@@ -37,7 +37,7 @@
                         <a class="nav-link" href="">HOME</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{${eventUrl}}">EVENTS</a>
+                        <a class="nav-link" th:href="@{/{path}/events(path=${userId})}">EVENTS</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="">TICKETS</a>
@@ -53,7 +53,8 @@
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                     <a class="dropdown-item" href="#">Profile</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" th:href="@{${logout}}">Sign Out</a>
+<!--                    <a class="dropdown-item" th:href="@{${logout}}">Sign Out</a>-->
+                    <a class="dropdown-item" th:href="@{/{path}/logout(path=${userId})}">Sign Out</a>
                 </div>
             </div>
         </nav>

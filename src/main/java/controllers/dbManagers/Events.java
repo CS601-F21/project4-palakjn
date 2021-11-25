@@ -3,10 +3,9 @@ package controllers.dbManagers;
 import controllers.DataSource;
 import models.Event;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,21 +13,35 @@ public class Events {
 
     public static boolean insert(Event event) {
         boolean isInserted = false;
+        Time from;
+        Time to;
+
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("hh:mm");
+            long ms = sdf.parse(event.getFrom()).getTime();
+            from = new Time(ms);
+            ms = sdf.parse(event.getTo()).getTime();
+            to = new Time(ms);
+        } catch (ParseException exception) {
+            exception.printStackTrace();
+            return false;
+        }
 
         try(Connection con = DataSource.getConnection()) {
-            String query = "INSERT INTO events VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+            String query = "INSERT INTO events VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
             PreparedStatement statement = con.prepareStatement(query);
             statement.setString(1, event.getId());
             statement.setString(2, event.getName());
             statement.setString(3, event.getPlace());
-            statement.setTime(4, event.getTime());
-            statement.setDate(5, event.getDate());
-            statement.setString(6, event.getImageUrl());
-            statement.setInt(7, event.getAvailability());
-            statement.setInt(8, event.getTotal());
-            statement.setString(9, event.getStatus());
-            statement.setString(10,event.getDescription());
-            statement.setString(11, event.getHost());
+            statement.setDate(4, Date.valueOf(event.getDate()));
+            statement.setString(5, event.getImageUrl());
+            statement.setInt(6, event.getAvailability());
+            statement.setInt(7, event.getTotal());
+            statement.setString(8, event.getStatus());
+            statement.setString(9,event.getDescription());
+            statement.setString(10, event.getHost());
+            statement.setTime(11, from);
+            statement.setTime(12, to);
             statement.executeUpdate();
 
             isInserted = true;
@@ -43,15 +56,16 @@ public class Events {
         List<Event> allEvents = new ArrayList<>();
 
         try(Connection con = DataSource.getConnection()) {
-            String query = "SELECT eventId, name, image, place, time, date, status FROM events;";
+            String query = "SELECT eventId, name, image, place, fromTime, toTime, date, status FROM events;";
             PreparedStatement statement = con.prepareStatement(query);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Event event = new Event(resultSet.getString("eventId"),
                                         resultSet.getString("name"),
                                         resultSet.getString("place"),
-                                        resultSet.getDate("date"),
-                                        resultSet.getTime("time"),
+                                        resultSet.getDate("date").toString(),
+                                        resultSet.getTime("fromTime").toString(),
+                                        resultSet.getTime("toTime").toString(),
                                         resultSet.getString("status"));
                 event.setImageUrl(resultSet.getString("image"));
                 allEvents.add(event);
@@ -76,8 +90,9 @@ public class Events {
                 event = new Event(resultSet.getString("eventId"),
                         resultSet.getString("name"),
                         resultSet.getString("place"),
-                        resultSet.getDate("date"),
-                        resultSet.getTime("time"),
+                        resultSet.getDate("date").toString(),
+                        resultSet.getTime("fromTime").toString(),
+                        resultSet.getTime("toTime").toString(),
                         resultSet.getString("status"));
                 event.setImageUrl(resultSet.getString("image"));
                 event.setAvailability(resultSet.getInt("availability"));

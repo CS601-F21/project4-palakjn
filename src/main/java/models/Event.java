@@ -1,14 +1,19 @@
 package models;
 
-import java.sql.Time;
-import java.sql.Date;
+import utilities.Strings;
 
 public class Event {
     private String id;
     private String name;
+    private String venue;
+    private String city;
+    private String state;
+    private String country;
+    private String zip;
     private String place;
-    private Date date;
-    private Time time;
+    private String date;
+    private String from;
+    private String to;
     private String imageUrl;
     private int availability;
     private int total;
@@ -16,12 +21,13 @@ public class Event {
     private String description;
     private String host;
 
-    public Event(String id, String name, String place, Date date, Time time, String status) {
+    public Event(String id, String name, String place, String date, String from, String to, String status) {
         this.id = id;
         this.name = name;
         this.place = place;
         this.date = date;
-        this.time = time;
+        this.from = from;
+        this.to = to;
         this.status = status;
     }
 
@@ -43,28 +49,80 @@ public class Event {
         this.name = name;
     }
 
+    public String getVenue() {
+        return venue;
+    }
+
+    public void setVenue(String venue) {
+        this.venue = venue;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getZip() {
+        return zip;
+    }
+
+    public void setZip(String zip) {
+        this.zip = zip;
+    }
+
     public String getPlace() {
-        return place;
+        if(!Strings.isNullOrEmpty(place)) {
+            return place;
+        } else {
+            return String.format("%s, %s, %s, %s, %s", venue, city, state, country, zip);
+        }
     }
 
     public void setPlace(String place) {
         this.place = place;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
-    public Time getTime() {
-        return time;
+    public String getFrom() {
+        return from;
     }
 
-    public void setTime(Time time) {
-        this.time = time;
+    public void setFrom(String time) {
+        this.from = time;
+    }
+
+    public String getTo() {
+        return to;
+    }
+
+    public void setTo(String to) {
+        this.to = to;
     }
 
     public String getImageUrl() {
