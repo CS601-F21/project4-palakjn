@@ -6,9 +6,9 @@ import models.ClientInfo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import utilities.DBManager;
+import controllers.dbManagers.Users;
 import utilities.LoginUtilities;
-import utilities.ServiceHandler;
+import controllers.ServiceHandler;
 import utilities.Strings;
 
 import javax.servlet.http.HttpServletRequest;
@@ -50,11 +50,11 @@ public class LoginController {
             return "redirect:/";
         }
         else {
-            String userId = DBManager.getUserId(clientInfo.getEmail());
+            String userId = Users.getUserId(clientInfo.getEmail());
             if(Strings.isNullOrEmpty(userId)) {
                 //It is a new user. Generating new user-id for the user.
                 userId = UUID.randomUUID().toString();
-                boolean isInserted = DBManager.insertUser(userId, clientInfo.getEmail(), clientInfo.getName());
+                boolean isInserted = Users.insertUser(userId, clientInfo.getEmail(), clientInfo.getName());
                 if(!isInserted) {
                     System.out.println("Some error while inserting into users table.");
                     //TODO: find a way to report an error to front page

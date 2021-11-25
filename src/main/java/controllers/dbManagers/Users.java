@@ -1,11 +1,13 @@
-package utilities;
+package controllers.dbManagers;
+
+import controllers.DataSource;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class DBManager {
+public class Users {
 
     public static boolean insertUser(String id, String email, String name) {
         boolean isInserted = false;

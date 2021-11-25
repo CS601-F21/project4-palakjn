@@ -1,4 +1,4 @@
-package utilities;
+package controllers;
 
 import configuration.Config;
 import org.apache.commons.dbcp2.BasicDataSource;

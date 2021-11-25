@@ -5,7 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import utilities.DBManager;
+import controllers.dbManagers.Users;
 import utilities.Strings;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,7 +28,7 @@ public class DashboardController {
             return "redirect:/";
         }
 
-        String name = DBManager.getUserName(userId);
+        String name = Users.getUserName(userId);
 
         if(Strings.isNullOrEmpty(name)) {
             //Unable to get user information
