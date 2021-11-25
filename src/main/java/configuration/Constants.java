@@ -17,10 +17,13 @@ public class Constants {
     public static final String REDIRECT_URI_KEY = "redirect_uri";
     public static final String OK_KEY = "ok";
 
-    public static final String CLIENT_INFO_KEY = "client_info_key";
+    public static final String CLIENT_USER_ID = "client_info_key";
     public static final String CLIENT_ID = "clientId";
     public static final String CLIENT_SECRET = "clientSecret";
     public static final String REDIRECT_URL = "redirectUrl";
+    public static final String SQL_SERVER_URL = "url";
+    public static final String USERNAME = "username";
+    public static final String PASSWORD = "password";
 
     public enum METHOD {
         POST,

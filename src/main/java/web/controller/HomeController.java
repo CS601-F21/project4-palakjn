@@ -18,7 +18,7 @@ public class HomeController {
         String sessionId = request.getSession(true).getId();
         System.out.printf("Request comes at / route with session id: %s\n", sessionId);
 
-        Object clientInfoObj = request.getSession().getAttribute(Constants.CLIENT_INFO_KEY);
+        Object clientInfoObj = request.getSession().getAttribute(Constants.CLIENT_USER_ID);
         if(clientInfoObj != null) {
             System.out.printf("Client with session ID %s already exists.\n", sessionId);
             return "redirect:/home";

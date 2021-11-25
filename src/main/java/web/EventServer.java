@@ -4,6 +4,7 @@ import configuration.Config;
 import configuration.Constants;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import utilities.DataSource;
 import utilities.JsonManager;
 import utilities.Strings;
 
@@ -12,10 +13,10 @@ import java.io.IOException;
 import java.util.Map;
 
 @SpringBootApplication
-public class HttpServer {
+public class EventServer {
 
     public static void main(String[] args) {
-        HttpServer server = new HttpServer();
+        EventServer server = new EventServer();
 
         //Getting configuration file
         String configFileLocation = server.getConfig(args);
@@ -28,7 +29,10 @@ public class HttpServer {
             boolean isValid = server.verifyConfig();
 
             if(isValid) {
-                SpringApplication.run(HttpServer.class, args);
+                //Initializing the SQL connection pool.
+                DataSource.init();
+
+                SpringApplication.run(EventServer.class, args);
             }
         }
     }
@@ -60,6 +64,9 @@ public class HttpServer {
                 Config.setClientId(values.getOrDefault(Constants.CLIENT_ID, null));
                 Config.setClientSecret(values.getOrDefault(Constants.CLIENT_SECRET, null));
                 Config.setRedirectUrl(values.getOrDefault(Constants.REDIRECT_URL, null));
+                Config.setUrl(values.getOrDefault(Constants.SQL_SERVER_URL, null));
+                Config.setUsername(values.getOrDefault(Constants.USERNAME, null));
+                Config.setPassword(values.getOrDefault(Constants.PASSWORD, null));
             }
         } catch (IOException exception) {
             exception.printStackTrace();
@@ -71,7 +78,10 @@ public class HttpServer {
 
         if(Strings.isNullOrEmpty(Config.getClientId()) ||
             Strings.isNullOrEmpty(Config.getClientSecret()) ||
-            Strings.isNullOrEmpty(Config.getRedirectUrl())) {
+            Strings.isNullOrEmpty(Config.getRedirectUrl()) ||
+            Strings.isNullOrEmpty(Config.getUrl()) ||
+            Strings.isNullOrEmpty(Config.getUsername()) ||
+            Strings.isNullOrEmpty(Config.getPassword())) {
             System.out.println("Invalid Config. Some properties missing");
         } else {
             isValid = true;
