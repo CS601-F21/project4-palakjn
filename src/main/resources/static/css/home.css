@@ -1,0 +1,52 @@
+.btn-background {
+    background-color: #ff4c68;
+    border-color: #ff4c68;
+}
+
+.btn-background:hover {
+    background-color: #ff4c68;
+    border-color: #ff4c68;
+}
+
+#events {
+    background-color: white;
+}
+
+.addEvent {
+    text-align:center;
+}
+
+.addEvent .addEventButton {
+      font-family: "Montserrat-Light";
+      font-size: 1.4rem;
+      font-weight: bold;
+      line-height: 18px;
+      text-align: center;
+      border-radius: 20px;
+      width: 180px;
+      height: 45px;
+      background: #ff4c68;
+      border-color: #ff4c68;
+      color: white;
+}
+
+.addEventButton:hover {
+    color: white;
+    background: #ff4c68;
+    border-color: #ff4c68;
+}
+
+#askInfo {
+    text-align: left;
+}
+
+.addEventButton1 {
+  background: #ff4c68;
+  border-color: #ff4c68;
+}
+
+.addEventButton1:hover {
+    color: white;
+    background: #ff4c68;
+    border-color: #ff4c68;
+}

@@ -12,19 +12,23 @@ public class LogoutController {
 
     @GetMapping("/{userId}/logout")
     public String dashboard(@PathVariable("userId") String userId, HttpServletRequest request) {
+        String sessionId = request.getSession(true).getId();
+        System.out.printf("Request comes at /%s/logout route with session id: %s\n", userId, sessionId);
+
         Object clientInfoObj = request.getSession().getAttribute(Constants.CLIENT_USER_ID);
         if(clientInfoObj == null) {
             //User is not logged in. Redirect user to login page.
             System.out.printf("User %s is not logged in.\n", userId);
             return "redirect:/";
         }
-        else if(!clientInfoObj.equals(userId)) {
+        else if(!clientInfoObj.toString().equals(userId)) {
             //Active session is not for the userId. Redirecting the user to login first.
             System.out.printf("User %s is not logged in. User %s is the active session. \n", userId, clientInfoObj);
             return "redirect:/";
         }
 
         request.getSession().invalidate();
+        System.out.println("Logout successfull");
         return "redirect:/";
     }
 }

@@ -21,7 +21,7 @@ public class HomeController {
         Object clientInfoObj = request.getSession().getAttribute(Constants.CLIENT_USER_ID);
         if(clientInfoObj != null) {
             System.out.printf("Client with session ID %s already exists.\n", sessionId);
-            return "redirect:/home";
+            return "redirect:/dashboard/" + clientInfoObj;
         }
 
         String nonce = LoginUtilities.generateNonce(sessionId);
@@ -31,7 +31,6 @@ public class HomeController {
                 sessionId,
                 nonce,
                 Config.getRedirectUrl());
-        System.out.printf("Authorize URL: %s.\n", url);
 
         model.addAttribute("slackAuthorizeUrl", url);
         return "index";

@@ -78,6 +78,25 @@
     font-size: 6.0rem;
 }
 
+.explore-button {
+      font-family: "Montserrat-Light";
+      font-size: 1.8rem;
+      font-weight: bold;
+      line-height: 18px;
+      text-align: center;
+      border-radius: 20px;
+      width: 150px;
+      height: 40px;
+      background: #ff4c68;
+      border-color: #ff4c68;
+}
+
+.explore-button:hover {
+    color: #FFADAD;
+    background: #ff4c68;
+    border-color: #ff4c68;
+}
+
 .image-holder{
     display: flex;
     justify-content: center;
@@ -92,4 +111,37 @@
     font-family: "Montserrat";
     font-weight: 800px;
     font-size: 1.8rem;
+ }
+
+ #features {
+   text-align: center;
+   color: white;
+ }
+
+ .feature-title {
+   font-size: 1.5rem;
+ }
+
+ .feature-box {
+   padding: 4.5%;
+   color: black;
+ }
+
+ .icon {
+   color: #ef8172;
+   margin-bottom: 1rem;
+ }
+
+ .icon:hover {
+   color: #ff4c68;
+ }
+
+ #footer {
+    background-color: #ff4c68;
+    text-align: center;
+    color: white;
+ }
+
+ .social-icon {
+   margin: 20px 10px;
  }
