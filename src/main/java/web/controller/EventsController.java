@@ -98,6 +98,6 @@ public class EventsController {
     }
 
     private String getImageDirectory(String userId, String eventId, String fileName) {
-        return Paths.get("users", userId, eventId, fileName).toString();
+        return Paths.get("/","users", userId, eventId, fileName).toString();
     }
 }

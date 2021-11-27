@@ -5,135 +5,45 @@
 </head>
 
 <body>
-<section id="heading">
-    <div class="container-fluid">
-        <div th:replace="common/home :: navBar"></div>
-    </div>
-</section>
-<section id="events">
-    <div class="container-fluid">
-
-        <div class="card-deck">
-            <div th:each="event : ${events}">
-                <div class="col-lg-4 card-column" style="max-width: 18rem;">
-                    <div class="card text-center border-dark mb-3" >
+    <section id="heading">
+        <div class="container-fluid">
+            <div th:replace="common/home :: navBar"></div>
+        </div>
+    </section>
+    <section id="events">
+        <div class="container-fluid">
+            <div th:replace="common/home :: addEvent"></div>
+            <div class="card-columns">
+                <div class="card" th:each="event : ${events}">
+                    <div class="card-body card-header">
                         <!--TODO: If image is empty then, keep background as pink-->
-                         <img class="card-img-top" th:src="@{${event.imageUrl}}" alt="Client image">
-                        <div class="card-body" style="text-align: left;">
-                            <h3 class="card-text event-heading"><span th:text="${event.name}"></span></h3>
-                            <p class=""card-text event-info><span th:text="${event.date}"></span></p>
-                            <p class=""card-text event-info><span th:text="${event.from}"></span> - <span th:text="${event.to}"></span></p>
-                            <p class=""card-text event-info><span th:text="${event.place}"></span></p>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label style="font-weight: bold;"></label>
-                                </div>
-                                <div class="col-md-6">
-                                    <p class=""card-text event-info><span th:text="${event.availability}"> </span></p>
-                                </div>
+                        <img class="card-img-top image" th:src="@{${event.imageUrl}}" alt="Event Image">
+                        <div class="dropdown show card-img-overlay options">
+                            <a class="card-dropdown-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </a>
+
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                <a class="dropdown-item" href="#">View</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#">Edit</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#">Delete</a>
                             </div>
                         </div>
-                        <div class="card-footer">
-                            <a th:href="@{/{path1}/events/{path2}(path1=${userId}, path2=${event.id})}" class="btn btn-dark">Buy</a>
-                        </div>
+                    </div>
+                    <div class="card-body card-footer">
+                        <h3 class="card-title"><span th:text="${event.name}"></span></h3>
+                        <h6 class="card-subtitle"><span th:text="${event.date}"></span></h6>
+                        <h6 class="card-subtitle"><span th:text="${event.from}"></span> - <span th:text="${event.to}"></span></h6>
+                        <h6 class="card-subtitle"><span th:text="${event.place}"></span></h6>
+                        <p class="card-description"><span th:text="${event.shortDescription}"></span>...</p>
+                        <a href="#" class="btn btn-light btn-sm card-link float-right card-read-more">Read more...</a>
                     </div>
                 </div>
             </div>
+            <div th:replace="common/home :: addEvent"></div>
         </div>
-
-        <div class="addEvent">
-            <a class="btn btn-dark btn-lg addEventButton" data-toggle="modal" data-target="#askInfo" role="button" style="color: white;"><i class="fas fa-map-pin"></i> Add Event</a>
-
-            <div class="modal fade" id="askInfo" tabindex="-1" role="dialog" aria-hidden="true">
-                <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Enter Event Information: </h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-
-                        <form th:action="@{/{path}/addEvent(path=${userId})}" th:object="${event}" method="post" enctype="multipart/form-data">
-                            <div class="modal-body">
-                                <div class="form-row">
-                                    <div class="col-md-6 mb-3">
-                                        <label>Event Name*</label>
-                                        <input type="text" class="form-control" placeholder="Event Name" name="name" th:field="*{name}" required>
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label>Host*</label>
-                                        <input type="text" class="form-control" placeholder="Host" name="host" th:field="*{host}" required>
-                                    </div>
-                                </div>
-                                <div class="form-row">
-                                    <div class="col-md-12 mb-3">
-                                        <label>Venue*</label>
-                                        <input type="text" class="form-control" placeholder="Venue" name="venue" th:field="*{venue}" required>
-                                    </div>
-                                </div>
-                                <div class="form-row">
-                                    <div class="col-md-3 mb-3">
-                                        <label>City*</label>
-                                        <input type="text" class="form-control" placeholder="City" name="city" th:field="*{city}" required>
-                                    </div>
-                                    <div class="col-md-3 mb-3">
-                                        <label>State*</label>
-                                        <input type="text" class="form-control" placeholder="State" name="state" th:field="*{state}" required>
-                                    </div>
-                                    <div class="col-md-3 mb-3">
-                                        <label>Country*</label>
-                                        <input type="text" class="form-control" placeholder="Country" name="country" th:field="*{country}" required>
-                                    </div>
-                                    <div class="col-md-3 mb-3">
-                                        <label>Zip*</label>
-                                        <input type="text" class="form-control" placeholder="Zip" name="zip" th:field="*{zip}" required>
-                                    </div>
-                                </div>
-                                <div class="form-row">
-                                    <div class="col-md-3 mb-3">
-                                        <label>Date*</label>
-                                        <input type="date" class="form-control" placeholder="Date" name="date" th:field="*{date}" required />
-                                    </div>
-                                    <div class="col-md-3 mb-3">
-                                        <label>From*</label>
-                                        <input type="time" class="form-control" placeholder="From" name="from" th:field="*{from}" required />
-                                    </div>
-                                    <div class="col-md-3 mb-3">
-                                        <label>To*</label>
-                                        <input type="time" class="form-control" placeholder="To" name="to" th:field="*{to}" required />
-                                    </div>
-                                    <div class="col-md-3 mb-3">
-                                        <label>Total Seats*</label>
-                                        <input type="text" class="form-control" placeholder="Total Seats" name="seats" th:field="*{total}" required />
-                                    </div>
-                                </div>
-                                <div class="form-row">
-                                    <div class="col-md-12 mb-3">
-                                        <label>Description</label>
-                                        <textarea class="form-control" rows="3" placeholder="Description" name="description" th:field="*{description}"></textarea>
-                                    </div>
-                                </div>
-                                <div class="form-row">
-                                    <div class="col-md-12 mb-3">
-                                        <label>Upload Image</label>
-                                        <input class="form-control" type="file" name="image">
-                                    </div>
-                                </div>
-                                <div id="passwordHelpBlock" class="form-text">
-                                    *Fields are Mandatory
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-dark addEventButton1" style="color: white;">Add Event</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+    </section>
 </body>
 </html>

@@ -20,6 +20,7 @@ public class Event {
     private String status;
     private String description;
     private String host;
+    private String shortDescription;
 
     public Event(String id, String name, String place, String date, String from, String to, String status) {
         this.id = id;
@@ -126,6 +127,10 @@ public class Event {
     }
 
     public String getImageUrl() {
+        if(Strings.isNullOrEmpty(imageUrl)) {
+            imageUrl = "/images/default.png";
+        }
+
         return imageUrl;
     }
 
@@ -171,5 +176,15 @@ public class Event {
 
     public void setHost(String host) {
         this.host = host;
+    }
+
+    public String getShortDescription() {
+        if(!Strings.isNullOrEmpty(description)) {
+            if(description.length() > 100) {
+                shortDescription = description.substring(0, 99);
+            }
+        }
+
+        return shortDescription;
     }
 }
