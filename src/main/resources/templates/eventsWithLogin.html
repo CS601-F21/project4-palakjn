@@ -12,7 +12,10 @@
     </section>
     <section id="events">
         <div class="container-fluid">
-            <div th:replace="common/home :: addEvent"></div>
+            <!-- https://stackoverflow.com/questions/33106391/how-to-check-if-list-is-empty-using-thymeleaf >-->
+            <!--https://www.baeldung.com/spring-thymeleaf-conditionals-->
+            <span th:if="${not #lists.isEmpty(events)}"><div th:replace="common/home :: addEvent"></div></span>
+
             <div class="card-columns">
                 <div class="card" th:each="event : ${events}">
                     <div class="card-body card-header">
@@ -35,7 +38,7 @@
                     <div class="card-body card-footer">
                         <h3 class="card-title"><span th:text="${event.name}"></span></h3>
                         <h6 class="card-subtitle"><span th:text="${event.date}"></span></h6>
-                        <h6 class="card-subtitle"><span th:text="${event.from}"></span> - <span th:text="${event.to}"></span></h6>
+                        <h6 class="card-subtitle"><span th:text="${event.from}"></span> | <span th:text="${event.durationString}"></span> </h6>
                         <h6 class="card-subtitle"><span th:text="${event.place}"></span></h6>
                         <p class="card-description"><span th:text="${event.shortDescription}"></span>...</p>
                         <a href="#" class="btn btn-light btn-sm card-link float-right card-read-more">Read more...</a>

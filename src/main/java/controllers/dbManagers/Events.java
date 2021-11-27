@@ -14,21 +14,18 @@ public class Events {
     public static boolean insert(Event event) {
         boolean isInserted = false;
         Time from;
-        Time to;
 
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("hh:mm");
             long ms = sdf.parse(event.getFrom()).getTime();
             from = new Time(ms);
-            ms = sdf.parse(event.getTo()).getTime();
-            to = new Time(ms);
         } catch (ParseException exception) {
             exception.printStackTrace();
             return false;
         }
 
         try(Connection con = DataSource.getConnection()) {
-            String query = "INSERT INTO events VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+            String query = "INSERT INTO events VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
             PreparedStatement statement = con.prepareStatement(query);
             statement.setString(1, event.getId());
             statement.setString(2, event.getName());
@@ -37,11 +34,13 @@ public class Events {
             statement.setString(5, event.getImageUrl());
             statement.setInt(6, event.getAvailability());
             statement.setInt(7, event.getTotal());
-            statement.setString(8, event.getStatus());
-            statement.setString(9,event.getDescription());
-            statement.setString(10, event.getHost());
-            statement.setTime(11, from);
-            statement.setTime(12, to);
+            statement.setString(8,event.getDescription());
+            statement.setString(9, event.getHost());
+            statement.setTime(10, from);
+            statement.setString(11, event.getHostId());
+            statement.setInt(12, event.getDuration());
+            statement.setString(13, event.getLanguage());
+            statement.setString(14, event.getGenre());
             statement.executeUpdate();
 
             isInserted = true;
@@ -56,7 +55,7 @@ public class Events {
         List<Event> allEvents = new ArrayList<>();
 
         try(Connection con = DataSource.getConnection()) {
-            String query = "SELECT eventId, name, image, place, fromTime, toTime, date, status, description FROM events;";
+            String query = "SELECT eventId, name, image, place, fromTime, duration, date, description FROM events;";
             PreparedStatement statement = con.prepareStatement(query);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
@@ -65,8 +64,7 @@ public class Events {
                                         resultSet.getString("place"),
                                         resultSet.getDate("date").toString(),
                                         resultSet.getTime("fromTime").toString(),
-                                        resultSet.getTime("toTime").toString(),
-                                        resultSet.getString("status"));
+                                        resultSet.getInt("duration"));
                 event.setImageUrl(resultSet.getString("image"));
                 event.setDescription(resultSet.getString("description"));
                 allEvents.add(event);
@@ -93,13 +91,15 @@ public class Events {
                         resultSet.getString("place"),
                         resultSet.getDate("date").toString(),
                         resultSet.getTime("fromTime").toString(),
-                        resultSet.getTime("toTime").toString(),
-                        resultSet.getString("status"));
+                        resultSet.getInt("duration"));
                 event.setImageUrl(resultSet.getString("image"));
                 event.setAvailability(resultSet.getInt("availability"));
                 event.setTotal(resultSet.getInt("total"));
                 event.setDescription(resultSet.getString("description"));
                 event.setHost(resultSet.getString("host"));
+                event.setHostId(resultSet.getString("hostId"));
+                event.setLanguage(resultSet.getString("language"));
+                event.setGenre(resultSet.getString("genre"));
             }
         } catch (SQLException sqlException) {
             System.err.printf("Error while getting all events from the table. %s\n", sqlException.getMessage());

@@ -81,9 +81,13 @@
                                         <label>Event Name*</label>
                                         <input type="text" class="form-control" placeholder="Event Name" name="name" th:field="*{name}" required>
                                     </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label>Host*</label>
-                                        <input type="text" class="form-control" placeholder="Host" name="host" th:field="*{host}" required>
+                                    <div class="col-md-3 mb-3">
+                                        <label>Genre*</label>
+                                        <input type="text" class="form-control" placeholder="Genre" name="genre" th:field="*{genre}" required>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label>Language*</label>
+                                        <input type="text" class="form-control" placeholder="Language" name="language" th:field="*{language}" required>
                                     </div>
                                 </div>
                                 <div class="form-row">
@@ -120,12 +124,12 @@
                                         <input type="time" class="form-control" placeholder="From" name="from" th:field="*{from}" required />
                                     </div>
                                     <div class="col-md-3 mb-3">
-                                        <label>To*</label>
-                                        <input type="time" class="form-control" placeholder="To" name="to" th:field="*{to}" required />
+                                        <label>Duration (In Minutes)*</label>
+                                        <input type="number" class="form-control" placeholder="Duration In Minutes" name="to" th:field="*{duration}" min="0" required />
                                     </div>
                                     <div class="col-md-3 mb-3">
                                         <label>Total Seats*</label>
-                                        <input type="text" class="form-control" placeholder="Total Seats" name="seats" th:field="*{total}" required />
+                                        <input type="number" class="form-control" placeholder="Total Seats" name="seats" th:field="*{total}" min="0" required />
                                     </div>
                                 </div>
                                 <div class="form-row">

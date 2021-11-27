@@ -2,6 +2,8 @@ package models;
 
 import utilities.Strings;
 
+import java.time.Duration;
+
 public class Event {
     private String id;
     private String name;
@@ -13,23 +15,25 @@ public class Event {
     private String place;
     private String date;
     private String from;
-    private String to;
+    private int duration;
+    private String durationString;
     private String imageUrl;
     private int availability;
     private int total;
-    private String status;
     private String description;
     private String host;
     private String shortDescription;
+    private String hostId;
+    private String language;
+    private String genre;
 
-    public Event(String id, String name, String place, String date, String from, String to, String status) {
+    public Event(String id, String name, String place, String date, String from, int duration) {
         this.id = id;
         this.name = name;
         this.place = place;
         this.date = date;
         this.from = from;
-        this.to = to;
-        this.status = status;
+        this.duration = duration;
     }
 
     public Event() {}
@@ -118,12 +122,31 @@ public class Event {
         this.from = time;
     }
 
-    public String getTo() {
-        return to;
+    public int getDuration() {
+        return duration;
     }
 
-    public void setTo(String to) {
-        this.to = to;
+    private String getDurationString() {
+        Duration d = Duration.ofMinutes(duration);
+        long days = d.toDaysPart();
+        long hours = d.toHoursPart();
+        long minutes = d.toMinutesPart();
+        if(days > 0) {
+            return String.format("%d days, %d hours and %d minutes", days, hours, minutes);
+        }
+        else if(hours > 0) {
+            return String.format("%d hours and %d minutes", hours, minutes);
+        }
+        else if(minutes > 0) {
+            return String.format("%s minutes", minutes);
+        }
+        else {
+            return "";
+        }
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
     }
 
     public String getImageUrl() {
@@ -154,28 +177,12 @@ public class Event {
         this.total = total;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     public String getDescription() {
         return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getHost() {
-        return host;
-    }
-
-    public void setHost(String host) {
-        this.host = host;
     }
 
     public String getShortDescription() {
@@ -186,5 +193,37 @@ public class Event {
         }
 
         return shortDescription;
+    }
+
+    public String getHost() {
+        return host;
+    }
+
+    public void setHost(String host) {
+        this.host = host;
+    }
+
+    public String getGenre() {
+        return genre;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
+
+    public String getHostId() {
+        return hostId;
+    }
+
+    public void setHostId(String hostId) {
+        this.hostId = hostId;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
     }
 }

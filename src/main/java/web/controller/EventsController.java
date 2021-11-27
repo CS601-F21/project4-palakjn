@@ -2,6 +2,7 @@ package web.controller;
 
 import configuration.Constants;
 import controllers.dbManagers.Events;
+import controllers.dbManagers.Users;
 import models.Event;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,7 +33,6 @@ public class EventsController {
         }
 
         List<Event> allEvents = Events.getEvents();
-
         if(allEvents != null && allEvents.size() > 0) {
             model.addAttribute("events", allEvents);
         }
@@ -78,6 +78,8 @@ public class EventsController {
         }
 
         event.setAvailability(event.getTotal());
+        event.setHostId(userId);
+        event.setHost(Users.getUserName(userId));
 
         boolean isAdded = Events.insert(event);
         if(isAdded) {
