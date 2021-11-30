@@ -88,6 +88,7 @@ public class LoginUtilities {
     public static ClientInfo verifyTokenResponse(Map<String, Object> map, String sessionId) {
         // verify ok: true
         if(!map.containsKey(Constants.OK_KEY) || !(boolean)map.get(Constants.OK_KEY)) {
+            //TODO: log the error
             return null;
         }
 
@@ -95,6 +96,7 @@ public class LoginUtilities {
         if(!map.containsKey(Constants.STATE_KEY) || !map.get(Constants.STATE_KEY).equals(sessionId)) {
             System.out.println(map.get(Constants.STATE_KEY));
             System.out.println(sessionId);
+            //TODO: log the reason
             return null;
         }
 
@@ -106,6 +108,7 @@ public class LoginUtilities {
         String expectedNonce = generateNonce(sessionId);
         String actualNonce = (String) payloadMap.get(Constants.NONCE_KEY);
         if(!expectedNonce.equals(actualNonce)) {
+            //TODO: log the reason
             return null;
         }
 

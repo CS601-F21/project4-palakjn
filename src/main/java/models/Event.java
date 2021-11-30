@@ -34,6 +34,7 @@ public class Event {
         this.date = date;
         this.from = from;
         this.duration = duration;
+        setDurationString();
     }
 
     public Event() {}
@@ -126,23 +127,36 @@ public class Event {
         return duration;
     }
 
-    private String getDurationString() {
+    public void setDurationString() {
         Duration d = Duration.ofMinutes(duration);
         long days = d.toDaysPart();
         long hours = d.toHoursPart();
         long minutes = d.toMinutesPart();
         if(days > 0) {
-            return String.format("%d days, %d hours and %d minutes", days, hours, minutes);
+            durationString = String.format("%d days, %d hour and %d minutes", days, hours, minutes);
         }
         else if(hours > 0) {
-            return String.format("%d hours and %d minutes", hours, minutes);
+            if(minutes > 0) {
+                durationString = String.format("%d hour and %d minutes", hours, minutes);
+            }
+            else {
+                durationString = String.format("%d hour", hours);
+            }
         }
         else if(minutes > 0) {
-            return String.format("%s minutes", minutes);
+            durationString = String.format("%s minutes", minutes);
         }
         else {
-            return "";
+            durationString = "";
         }
+    }
+
+    public void setShortDescription(String shortDescription) {
+        this.shortDescription = shortDescription;
+    }
+
+    public String getDurationString() {
+        return this.durationString;
     }
 
     public void setDuration(int duration) {

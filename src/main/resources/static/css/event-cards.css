@@ -1,0 +1,63 @@
+#events .card-columns {
+    margin-top: 35px;
+    margin-bottom: 35px;
+}
+
+#events .card {
+    box-shadow: 0 0 10px 0 rgba(255, 149, 149, 0.753);
+    border-radius: 10px;
+    border-color: white;
+}
+
+#events .card-body {
+    padding: 0.5rem;
+    background-color: #ff4c68;
+    color: white;
+}
+
+#events .card-subtitle {
+    margin-top: 0px;
+    font-family: Lato;
+}
+
+#events .card-description {
+    margin-top: 1rem;
+    font-family: Montserrat;
+}
+
+#events .card-title {
+    font-family: Caveat;
+}
+
+#events .card-header {
+    padding: 0.5rem;
+}
+
+#events .card-footer {
+    padding: 1.5rem;
+}
+
+#events .card-dropdown-link {
+    cursor: pointer;
+    color: white;
+}
+
+#events .options {
+    text-align: right;
+    font-size: 1.4rem;
+}
+
+#events .card-read-more {
+    background-color: #ff2547;
+    color: white;
+    margin-bottom: 0.4rem;
+}
+
+#events .card-read-more:hover {
+    background-color:#ff667e;
+    color:white;
+}
+
+#events .card-link {
+    position: relative;
+}

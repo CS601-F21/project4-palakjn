@@ -27,6 +27,11 @@ public class FileStorage {
         return created;
     }
 
+    public static boolean exists(String directory) {
+        Path path = Paths.get(directory);
+        return Files.exists(path);
+    }
+
     public static boolean createFile(MultipartFile file, String directory, String fileName) {
         boolean created = false;
 

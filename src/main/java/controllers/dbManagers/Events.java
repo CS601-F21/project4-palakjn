@@ -55,7 +55,7 @@ public class Events {
         List<Event> allEvents = new ArrayList<>();
 
         try(Connection con = DataSource.getConnection()) {
-            String query = "SELECT eventId, name, image, place, fromTime, duration, date, description FROM events;";
+            String query = "SELECT eventId, name, image, place, fromTime, duration, date, description, hostId FROM events;";
             PreparedStatement statement = con.prepareStatement(query);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
@@ -67,6 +67,7 @@ public class Events {
                                         resultSet.getInt("duration"));
                 event.setImageUrl(resultSet.getString("image"));
                 event.setDescription(resultSet.getString("description"));
+                event.setHostId(resultSet.getString("hostId"));
                 allEvents.add(event);
             }
         } catch (SQLException sqlException) {

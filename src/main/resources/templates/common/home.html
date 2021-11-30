@@ -11,6 +11,7 @@
         <link rel="stylesheet" th:href="@{https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css}" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
         <link rel="stylesheet" th:href="@{/css/index.css}">
         <link rel="stylesheet" th:href="@{/css/home.css}">
+        <link rel="stylesheet" th:href="@{/css/event-cards.css}">
 
         <!-- Font Awesome -->
         <script defer th:src="@{https://use.fontawesome.com/releases/v5.15.4/js/all.js}"></script>
@@ -53,7 +54,6 @@
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                     <a class="dropdown-item" href="#">Profile</a>
                     <div class="dropdown-divider"></div>
-<!--                    <a class="dropdown-item" th:href="@{${logout}}">Sign Out</a>-->
                     <a class="dropdown-item" th:href="@{/{path}/logout(path=${userId})}">Sign Out</a>
                 </div>
             </div>
@@ -74,7 +74,7 @@
                             </button>
                         </div>
 
-                        <form th:action="@{/{path}/addEvent(path=${userId})}" th:object="${event}" method="post" enctype="multipart/form-data">
+                        <form th:action="@{/{path}/events(path=${userId})}" th:object="${event}" method="post" enctype="multipart/form-data">
                             <div class="modal-body">
                                 <div class="form-row">
                                     <div class="col-md-6 mb-3">
@@ -92,8 +92,8 @@
                                 </div>
                                 <div class="form-row">
                                     <div class="col-md-12 mb-3">
-                                        <label>Venue*</label>
-                                        <input type="text" class="form-control" placeholder="Venue" name="venue" th:field="*{venue}" required>
+                                        <label>Address*</label>
+                                        <input type="text" class="form-control" placeholder="Address" name="venue" th:field="*{venue}" required>
                                     </div>
                                 </div>
                                 <div class="form-row">

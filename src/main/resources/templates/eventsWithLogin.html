@@ -20,7 +20,7 @@
                 <div class="card" th:each="event : ${events}">
                     <div class="card-body card-header">
                         <!--TODO: If image is empty then, keep background as pink-->
-                        <img class="card-img-top image" th:src="@{${event.imageUrl}}" alt="Event Image">
+                        <img class="card-img-top image" th:src="@{/event-photos/{path} (path=${event.imageUrl})}" alt="Event Image">
                         <div class="dropdown show card-img-overlay options">
                             <a class="card-dropdown-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-ellipsis-v"></i>
@@ -28,10 +28,12 @@
 
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                 <a class="dropdown-item" href="#">View</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Edit</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Delete</a>
+                                <span th:if="${event.hostId} eq ${userId}">
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#">Edit</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#">Delete</a>
+                                </span>
                             </div>
                         </div>
                     </div>
