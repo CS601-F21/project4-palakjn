@@ -5,6 +5,7 @@ import configuration.Constants;
 import controllers.dbManagers.Events;
 import controllers.dbManagers.Users;
 import models.Event;
+import models.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ import java.util.UUID;
 public class EventsController {
 
     @GetMapping("/events")
-    public String events(Model model, HttpServletRequest request) {
+    public String getEvents(Model model, HttpServletRequest request) {
         String sessionId = request.getSession(true).getId();
         System.out.printf("Request comes at /events route with session id: %s.\n", sessionId);
 
@@ -93,10 +94,47 @@ public class EventsController {
         return "redirect:/events";
     }
 
-//    @GetMapping("/{userId}/event/{eventId}")
-//    public String getEvent(@PathVariable("userId") String userId, @PathVariable("eventId") String eventId, Model model) {
-//
-//    }
+    @GetMapping("/events/{eventId}")
+    public String getEvent(@PathVariable("eventId") String eventId, Model model, HttpServletRequest request) {
+
+        //Getting event information from database
+        Event event = Events.getEvent(eventId);
+        if(event != null) {
+            model.addAttribute("event", event);
+
+            //Getting event host information from database
+            User user = Users.getUserIdAndName(event.getHostId());
+            if(user != null) {
+                model.addAttribute("user", user);
+
+                String sessionId = request.getSession(true).getId();
+                Object userInfo = request.getSession().getAttribute(Constants.CLIENT_USER_ID);
+                if(userInfo != null) {
+                    //User is already logged in. Will display event information in user's page
+                    model.addAttribute("userId", userInfo);
+                } else {
+                    //User is not logged in. Will display all events but will not allow book/edit/delete option
+                    String nonce = LoginUtilities.generateNonce(sessionId);
+
+                    // Generate url for request to Slack
+                    String url = LoginUtilities.generateSlackAuthorizeURL(Config.getClientId(),
+                            sessionId,
+                            nonce,
+                            Config.getRedirectUrl());
+
+                    model.addAttribute("slackAuthorizeUrl", url);
+                }
+            } else {
+                model.addAttribute("message", Constants.ERROR_MESSAGE);
+            }
+        }
+        else {
+            //No event found
+            model.addAttribute("message", Constants.ERROR_MESSAGE);
+        }
+
+        return "event";
+    }
 
     private String getFileName(String eventId, String fileName) {
         String extension = getExtension(fileName).isPresent() ? getExtension(fileName).get() : ".png";

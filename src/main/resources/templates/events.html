@@ -27,7 +27,6 @@
             <div class="card-columns">
                 <div class="card" th:each="event : ${events}">
                     <div class="card-body card-header">
-                        <!--TODO: If image is empty then, keep background as pink-->
                         <img class="card-img-top" th:src="@{/event-photos/{path} (path=${event.imageUrl})}" alt="Event Image">
                         <span th:if="${userId != null}">
                             <div class="dropdown show card-img-overlay options">
@@ -36,7 +35,7 @@
                                 </a>
 
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                    <a class="dropdown-item" href="#">View</a>
+                                    <a class="dropdown-item" th:href="@{/events/{path}(path=${event.id})}">View</a>
                                     <span th:if="${event.hostId} eq ${userId}">
                                         <div class="dropdown-divider"></div>
                                         <a class="dropdown-item" href="#">Edit</a>

@@ -2,7 +2,7 @@
     padding: 2% 10% 0% 10%;
   }
 
-#event-heading .event-border {
+.event-border {
       border-style: solid;
       border-color: rgba(206, 201, 201, 0.753);
       box-shadow: 0 0 5px 0 rgba(206, 201, 201, 0.753);
@@ -72,46 +72,44 @@
     margin-left: 10px;
 }
 
-/* Section event description */
-
 #event-details .container-fluid{
     padding: 2% 11% 0% 11%;
 }
 
-event-details .host-info {
+#event-details .host-info {
     padding-bottom: 10px;
     padding-left: 0px;
 }
 
-event-details .host-border {
+#event-details .host-border {
     height: 150px;
 }
 
-event-details .share-event {
+#event-details .share-event {
     margin-top: 10px;
     height: 60px;
 }
 
-event-details .host-heading {
+#event-details .host-heading {
     font-weight: bold;
     font-family:cursive;
     color: #ff4c68;
 }
 
-event-details .host-share-container {
+#event-details .host-share-container {
     text-align: center;
     margin-top: 10px;
 }
 
-event-details .host-info-container {
+#event-details .host-info-container {
     padding-left: 10px;
 }
 
-event-details .host-photo-name {
+#event-details .host-photo-name {
     padding-top: 10px;
 }
 
-event-details .host-image {
+#event-details .host-image {
     width: 50%;
     height: 100px;
     float: left;
@@ -119,13 +117,13 @@ event-details .host-image {
     border-radius: 100px;
 }
 
-event-details .host-name {
+#event-details .host-name {
     text-align: left;
     padding-top: 25px;
     font-family: "Ubuntu";
 }
 
-event-details .share-button {
+#event-details .share-button {
     font-family: "Montserrat-Light";
     font-size: 1.8rem;
     font-weight: bold;
@@ -134,23 +132,23 @@ event-details .share-button {
     color: #ff4c68;
 }
 
-event-details .share-button:hover {
+#event-details .share-button:hover {
     color: #FFADAD;
     text-decoration: none;
 }
 
-event-details .event-info-container {
+#event-details .event-info-container {
     padding: 2% 4% 2% 4%;
     text-align: justify;
 }
 
-event-details .event-location-label, .event-description-label {
+#event-details .event-location-label, .event-description-label {
     float: left;
     margin-right: 10px;
     font-weight: 800;
     color: #ff4c68;
 }
 
-event-details .event-location-value, .event-description-value {
+#event-details .event-location-value, .event-description-value {
     font-family: "Ubuntu";
 }

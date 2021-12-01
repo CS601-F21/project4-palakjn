@@ -103,7 +103,7 @@ public class Events {
                 event.setGenre(resultSet.getString("genre"));
             }
         } catch (SQLException sqlException) {
-            System.err.printf("Error while getting all events from the table. %s\n", sqlException.getMessage());
+            System.err.printf("Error while getting %s event information from the table. %s\n", id, sqlException.getMessage());
             event = null;
         }
 

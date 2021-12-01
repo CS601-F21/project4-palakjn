@@ -1,6 +1,7 @@
 package controllers.dbManagers;
 
 import controllers.DataSource;
+import models.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -61,5 +62,25 @@ public class Users {
         }
 
         return name;
+    }
+
+    public static User getUserIdAndName(String userId) {
+        User user = new User();
+
+        try (Connection con = DataSource.getConnection()) {
+            String query = "SELECT id, name FROM users WHERE id = ?;";
+            PreparedStatement statement = con.prepareStatement(query);
+            statement.setString(1, userId);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                user.setName(resultSet.getString("name"));
+                user.setId(resultSet.getString("id"));
+            }
+        } catch (SQLException sqlException) {
+            System.err.printf("Error while getting user %s information. %s.\n", userId, sqlException.getMessage());
+            user = null;
+        }
+
+        return user;
     }
 }
