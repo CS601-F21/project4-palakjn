@@ -27,7 +27,7 @@ public class LoginController {
         Object clientInfoObj = request.getSession().getAttribute(Constants.CLIENT_USER_ID);
         if(clientInfoObj != null) {
             System.out.printf("Client with session ID %s already exists. Redirecting to home page\n", sessionId);
-            return "redirect:/dashboard/" + clientInfoObj;
+            return "redirect:/dashboard";
         }
 
         // retrieve the code provided by Slack
@@ -63,7 +63,7 @@ public class LoginController {
             }
 
             request.getSession().setAttribute(Constants.CLIENT_USER_ID, userId);
-            return "redirect:/dashboard/" + userId;
+            return "redirect:/dashboard";
         }
     }
 }

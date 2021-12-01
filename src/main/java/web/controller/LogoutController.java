@@ -3,32 +3,26 @@ package web.controller;
 import configuration.Constants;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class LogoutController {
 
-    @GetMapping("/{userId}/logout")
-    public String dashboard(@PathVariable("userId") String userId, HttpServletRequest request) {
+    @GetMapping("/logout")
+    public String dashboard(HttpServletRequest request) {
         String sessionId = request.getSession(true).getId();
-        System.out.printf("Request comes at /%s/logout route with session id: %s\n", userId, sessionId);
+        System.out.printf("Request comes at /logout route with session id: %s\n", sessionId);
 
         Object clientInfoObj = request.getSession().getAttribute(Constants.CLIENT_USER_ID);
         if(clientInfoObj == null) {
             //User is not logged in. Redirect user to login page.
-            System.out.printf("User %s is not logged in.\n", userId);
-            return "redirect:/";
-        }
-        else if(!clientInfoObj.toString().equals(userId)) {
-            //Active session is not for the userId. Redirecting the user to login first.
-            System.out.printf("User %s is not logged in. User %s is the active session. \n", userId, clientInfoObj);
+            System.out.println("User is not logged in.");
             return "redirect:/";
         }
 
         request.getSession().invalidate();
-        System.out.println("Logout successfull");
+        System.out.println("Logout successful");
         return "redirect:/";
     }
 }

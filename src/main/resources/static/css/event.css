@@ -1,0 +1,156 @@
+#event-heading .container-fluid{
+    padding: 2% 10% 0% 10%;
+  }
+
+#event-heading .event-border {
+      border-style: solid;
+      border-color: rgba(206, 201, 201, 0.753);
+      box-shadow: 0 0 5px 0 rgba(206, 201, 201, 0.753);
+  }
+
+#event-heading .event-image-container {
+    text-align: center;
+    filter: blur(8px);
+}
+
+#event-heading .event-image {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    width: 80%;
+    height: 100%;
+    padding: 10px;
+    text-align: center;
+}
+
+#event-heading .event-title {
+    margin-top: 20px;
+    margin-left: 10px;
+}
+
+#event-heading .event-title-heading {
+    font-weight: bold;
+    font-family: cursive;
+    color: #ff4c68;
+}
+
+#event-heading .event-book-option {
+    text-align: right;
+    right: 20px;
+}
+
+#event-heading .book-button {
+    font-family: "Montserrat-Light";
+      font-size: 1.8rem;
+      font-weight: bold;
+      line-height: 18px;
+      text-align: center;
+      border-radius: 20px;
+      width: 150px;
+      height: 40px;
+      background: #ff4c68;
+      border-color: #ff4c68;
+      color: white;
+}
+
+#event-heading .book-button:hover {
+    color: white;
+    background: #FFADAD;
+    border-color: #FFADAD;
+}
+
+#event-heading .horizontalLine {
+    margin-top: 0px;
+    border: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+#event-heading .event-sub-details {
+    margin-top: 1px;
+    margin-left: 10px;
+}
+
+/* Section event description */
+
+#event-details .container-fluid{
+    padding: 2% 11% 0% 11%;
+}
+
+event-details .host-info {
+    padding-bottom: 10px;
+    padding-left: 0px;
+}
+
+event-details .host-border {
+    height: 150px;
+}
+
+event-details .share-event {
+    margin-top: 10px;
+    height: 60px;
+}
+
+event-details .host-heading {
+    font-weight: bold;
+    font-family:cursive;
+    color: #ff4c68;
+}
+
+event-details .host-share-container {
+    text-align: center;
+    margin-top: 10px;
+}
+
+event-details .host-info-container {
+    padding-left: 10px;
+}
+
+event-details .host-photo-name {
+    padding-top: 10px;
+}
+
+event-details .host-image {
+    width: 50%;
+    height: 100px;
+    float: left;
+    margin-right: 30px;
+    border-radius: 100px;
+}
+
+event-details .host-name {
+    text-align: left;
+    padding-top: 25px;
+    font-family: "Ubuntu";
+}
+
+event-details .share-button {
+    font-family: "Montserrat-Light";
+    font-size: 1.8rem;
+    font-weight: bold;
+    line-height: 18px;
+    text-align: center;
+    color: #ff4c68;
+}
+
+event-details .share-button:hover {
+    color: #FFADAD;
+    text-decoration: none;
+}
+
+event-details .event-info-container {
+    padding: 2% 4% 2% 4%;
+    text-align: justify;
+}
+
+event-details .event-location-label, .event-description-label {
+    float: left;
+    margin-right: 10px;
+    font-weight: 800;
+    color: #ff4c68;
+}
+
+event-details .event-location-value, .event-description-value {
+    font-family: "Ubuntu";
+}

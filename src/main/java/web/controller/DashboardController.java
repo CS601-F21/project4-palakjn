@@ -13,20 +13,17 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 public class DashboardController {
 
-    @GetMapping("/dashboard/{userId}")
-    public String dashboard(@PathVariable("userId") String userId, Model model, HttpServletRequest request) {
+    @GetMapping("/dashboard")
+    public String dashboard(Model model, HttpServletRequest request) {
 
         Object clientInfoObj = request.getSession().getAttribute(Constants.CLIENT_USER_ID);
         if(clientInfoObj == null) {
             //User is not logged in. Redirect user to login page.
-            System.out.printf("User %s is not logged in.\n", userId);
+            System.out.println("User is not logged in.");
             return "redirect:/";
         }
-        else if(!clientInfoObj.equals(userId)) {
-            //Active session is not for the userId. Redirecting the user to login first.
-            System.out.printf("User %s is not logged in. User %s is the active session. \n", userId, clientInfoObj);
-            return "redirect:/";
-        }
+
+        String userId = (String) clientInfoObj;
 
         String name = Users.getUserName(userId);
 

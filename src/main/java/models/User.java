@@ -1,11 +1,14 @@
 package models;
 
+import utilities.Strings;
+
 public class User {
     private int id;
     private String name;
     private String email;
     private String location;
     private String phone;
+    private String image;
 
     public int getId() {
         return id;
@@ -45,5 +48,17 @@ public class User {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getImage() {
+        if(Strings.isNullOrEmpty(this.image)) {
+            image = "/images/profilePic.png";
+        }
+
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

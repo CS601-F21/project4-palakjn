@@ -21,7 +21,7 @@ public class HomeController {
         Object clientInfoObj = request.getSession().getAttribute(Constants.CLIENT_USER_ID);
         if(clientInfoObj != null) {
             System.out.printf("Client with session ID %s already exists.\n", sessionId);
-            return "redirect:/dashboard/" + clientInfoObj;
+            return "redirect:/dashboard";
         }
 
         String nonce = LoginUtilities.generateNonce(sessionId);

@@ -13,7 +13,6 @@ import utilities.FileStorage;
 import utilities.LoginUtilities;
 
 import javax.servlet.http.HttpServletRequest;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -26,66 +25,45 @@ public class EventsController {
         String sessionId = request.getSession(true).getId();
         System.out.printf("Request comes at /events route with session id: %s.\n", sessionId);
 
+        System.out.println("Getting all events from database");
+        List<Event> allEvents = Events.getEvents();
+        if(allEvents != null && allEvents.size() > 0) {
+            System.out.printf("Got %s events from database. \n", allEvents.size());
+            model.addAttribute("events", allEvents);
+        }
+
         Object userInfo = request.getSession().getAttribute(Constants.CLIENT_USER_ID);
         if(userInfo != null) {
-            //User is already logged in. Redirecting the user to /:userId/events page
-            return "redirect:/" + userInfo + "/events";
+            //User is already logged in.
+            model.addAttribute("userId", userInfo);
+            model.addAttribute("event", new Event());
+        }
+        else {
+            //User is not logged in. Will display all events but will not allow book/edit/delete option
+            String nonce = LoginUtilities.generateNonce(sessionId);
+
+            // Generate url for request to Slack
+            String url = LoginUtilities.generateSlackAuthorizeURL(Config.getClientId(),
+                    sessionId,
+                    nonce,
+                    Config.getRedirectUrl());
+
+            model.addAttribute("slackAuthorizeUrl", url);
         }
 
-        List<Event> allEvents = Events.getEvents();
-        if(allEvents != null && allEvents.size() > 0) {
-            model.addAttribute("events", allEvents);
-        }
-
-        String nonce = LoginUtilities.generateNonce(sessionId);
-
-        // Generate url for request to Slack
-        String url = LoginUtilities.generateSlackAuthorizeURL(Config.getClientId(),
-                sessionId,
-                nonce,
-                Config.getRedirectUrl());
-
-        model.addAttribute("slackAuthorizeUrl", url);
-        return "eventsWithoutLogin";
+        return "events";
     }
 
-    @GetMapping("/{userId}/events")
-    public String events(@PathVariable("userId") String userId, Model model, HttpServletRequest request) {
-        System.out.printf("Request comes at /%s/events route with session id: %s.\n", userId, request.getSession(true).getId());
+    @PostMapping("/events")
+    public String addEvent(@RequestParam("image") MultipartFile file, @ModelAttribute Event event, HttpServletRequest request) {
+        System.out.printf("Request comes at POST /events route with session id: %s.\n", request.getSession(true).getId());
 
         Object userInfo = request.getSession().getAttribute(Constants.CLIENT_USER_ID);
         if(userInfo == null) {
             //User is not being authorized
             return "redirect:/";
-        } else if(!userInfo.toString().equals(userId)) {
-            //Active session is not for the userId. Redirecting the user to login first.
-            System.out.printf("User %s is not logged in. User %s is the active session. \n", userId, userInfo);
-            return "redirect:/";
         }
-
-        List<Event> allEvents = Events.getEvents();
-        if(allEvents != null && allEvents.size() > 0) {
-            model.addAttribute("events", allEvents);
-        }
-
-        model.addAttribute("userId", userId);
-        model.addAttribute("event", new Event());
-        return "eventsWithLogin";
-    }
-
-    @PostMapping("/{userId}/events")
-    public String addEvent(@PathVariable("userId") String userId, @RequestParam("image") MultipartFile file, @ModelAttribute Event event, HttpServletRequest request) {
-        System.out.printf("Request comes at /%s/addEvent route with session id: %s.\n", userId, request.getSession(true).getId());
-
-        Object userInfo = request.getSession().getAttribute(Constants.CLIENT_USER_ID);
-        if(userInfo == null) {
-            //User is not being authorized
-            return "redirect:/";
-        } else if(!userInfo.toString().equals(userId)) {
-            //Active session is not for the userId. Redirecting the user to login first.
-            System.out.printf("User %s is not logged in. User %s is the active session. \n", userId, userInfo);
-            return "redirect:/";
-        }
+        String userId = (String) userInfo;
 
         event.setId(UUID.randomUUID().toString());
 
@@ -112,8 +90,13 @@ public class EventsController {
             System.out.printf("Event %s NOT added to the table", event.getName());
         }
 
-        return "redirect:/" + userId + "/events";
+        return "redirect:/events";
     }
+
+//    @GetMapping("/{userId}/event/{eventId}")
+//    public String getEvent(@PathVariable("userId") String userId, @PathVariable("eventId") String eventId, Model model) {
+//
+//    }
 
     private String getFileName(String eventId, String fileName) {
         String extension = getExtension(fileName).isPresent() ? getExtension(fileName).get() : ".png";
