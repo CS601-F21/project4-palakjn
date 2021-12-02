@@ -82,7 +82,6 @@ public class EventsController {
 
         event.setAvailability(event.getTotal());
         event.setHostId(userId);
-        event.setHost(Users.getUserName(userId));
 
         boolean isAdded = Events.insert(event);
         if(isAdded) {

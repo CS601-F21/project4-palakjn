@@ -62,7 +62,7 @@
         </div>
     </section>
 
-    <span th:if="${userId != null}"><!--TODO: Add blank space here--> </span>
+    <span th:if="${userId != null}"><div style="height:400px; width:100%; clear:both;"></div></span>
     <span th:if="${userId == null}"><div th:replace="common/index :: foot"></div></span>
 </body>
 </html>

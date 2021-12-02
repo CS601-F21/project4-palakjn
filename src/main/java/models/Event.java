@@ -2,12 +2,15 @@ package models;
 
 import utilities.Strings;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.Duration;
+import java.util.Date;
 
 public class Event {
     private String id;
     private String name;
-    private String venue;
+    private String address;
     private String city;
     private String state;
     private String country;
@@ -21,16 +24,14 @@ public class Event {
     private int availability;
     private int total;
     private String description;
-    private String host;
     private String shortDescription;
     private String hostId;
     private String language;
     private String genre;
 
-    public Event(String id, String name, String place, String date, String from, int duration) {
+    public Event(String id, String name, String date, String from, int duration) {
         this.id = id;
         this.name = name;
-        this.place = place;
         this.date = date;
         this.from = from;
         this.duration = duration;
@@ -55,12 +56,12 @@ public class Event {
         this.name = name;
     }
 
-    public String getVenue() {
-        return venue;
+    public String getAddress() {
+        return address;
     }
 
-    public void setVenue(String venue) {
-        this.venue = venue;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getCity() {
@@ -96,23 +97,35 @@ public class Event {
     }
 
     public String getPlace() {
-        if(!Strings.isNullOrEmpty(place)) {
-            return place;
-        } else {
-            return String.format("%s, %s, %s, %s, %s", venue, city, state, country, zip);
-        }
-    }
-
-    public void setPlace(String place) {
-        this.place = place;
-    }
-
-    public String getDate() {
-        return date;
+         return String.format("%s, %s, %s, %s, %s", address, city, state, country, zip);
     }
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public String getDate(boolean withFormat) {
+        if(withFormat) {
+            return getDate();
+        }
+        else {
+            return date;
+        }
+    }
+
+    public String getDate() {
+        try {
+            if(!Strings.isNullOrEmpty(this.date)) {
+                Date date = new SimpleDateFormat("yyyy-MM-dd").parse(this.date);
+                DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
+
+                return dateFormat.format(date);
+            }
+        } catch (java.text.ParseException exception) {
+            exception.printStackTrace();
+        }
+
+        return this.date;
     }
 
     public String getFrom() {
@@ -207,14 +220,6 @@ public class Event {
         }
 
         return shortDescription;
-    }
-
-    public String getHost() {
-        return host;
-    }
-
-    public void setHost(String host) {
-        this.host = host;
     }
 
     public String getGenre() {

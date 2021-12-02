@@ -3,10 +3,7 @@ package controllers.dbManagers;
 import controllers.DataSource;
 import models.User;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class Users {
 
@@ -82,5 +79,61 @@ public class Users {
         }
 
         return user;
+    }
+
+    public static User getUserProfile(String userId) {
+        User user = new User();
+
+        try (Connection con = DataSource.getConnection()) {
+            String query = "SELECT * FROM users WHERE id = ?;";
+            PreparedStatement statement = con.prepareStatement(query);
+            statement.setString(1, userId);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                user.setId(resultSet.getString("id"));
+                user.setName(resultSet.getString("name"));
+                user.setEmail(resultSet.getString("email"));
+                user.setDob(resultSet.getDate("dob") == null ? null : resultSet.getDate("dob").toString());
+                user.setPhone(resultSet.getString("phone"));
+                user.setAddress(resultSet.getString("address"));
+                user.setCity(resultSet.getString("city"));
+                user.setState(resultSet.getString("state"));
+                user.setCountry(resultSet.getString("country"));
+                user.setZip(resultSet.getString("zip"));
+                user.setImage(resultSet.getString("imageUrl"));
+            }
+        } catch (SQLException sqlException) {
+            System.err.printf("Error while getting user %s information. %s.\n", userId, sqlException.getMessage());
+            user = null;
+        }
+
+        return user;
+    }
+
+    public static boolean updateUser(User user) {
+        boolean isUpdated = false;
+
+        try (Connection con = DataSource.getConnection()) {
+            String query = "UPDATE users SET dob = ?, phone = ?, address = ?, city = ?, state = ?, country = ?, zip = ?, imageUrl = ? WHERE id = ?";
+            PreparedStatement statement = con.prepareStatement(query);
+            statement.setDate(1, Date.valueOf(user.getDob(false)));
+            statement.setString(2, user.getPhone());
+            statement.setString(3, user.getAddress());
+            statement.setString(4, user.getCity());
+            statement.setString(5, user.getState());
+            statement.setString(6, user.getCountry());
+            statement.setString(7, user.getZip());
+            statement.setString(8, user.getImage());
+            statement.setString(9, user.getId());
+
+            statement.executeUpdate();
+
+            isUpdated = true;
+        } catch (SQLException sqlException) {
+            System.err.printf("Error while updating user %s information. %s.\n", user.getName(), sqlException.getMessage());
+            isUpdated = false;
+        }
+
+        return isUpdated;
     }
 }

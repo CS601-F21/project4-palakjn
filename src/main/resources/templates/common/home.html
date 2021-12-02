@@ -13,6 +13,7 @@
         <link rel="stylesheet" th:href="@{/css/home.css}">
         <link rel="stylesheet" th:href="@{/css/events.css}">
         <link rel="stylesheet" th:href="@{/css/event.css}">
+        <link rel="stylesheet" th:href="@{/css/profile.css}">
 
         <!-- Font Awesome -->
         <script defer th:src="@{https://use.fontawesome.com/releases/v5.15.4/js/all.js}"></script>
@@ -53,7 +54,7 @@
                 </button>
 
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                    <a class="dropdown-item" href="#">Profile</a>
+                    <a class="dropdown-item" th:href="@{/profile}">Profile</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" th:href="@{/logout}">Sign Out</a>
                 </div>
@@ -94,7 +95,7 @@
                                 <div class="form-row">
                                     <div class="col-md-12 mb-3">
                                         <label>Address*</label>
-                                        <input type="text" class="form-control" placeholder="Address" name="venue" th:field="*{venue}" required>
+                                        <input type="text" class="form-control" placeholder="Address" name="venue" th:field="*{address}" required>
                                     </div>
                                 </div>
                                 <div class="form-row">

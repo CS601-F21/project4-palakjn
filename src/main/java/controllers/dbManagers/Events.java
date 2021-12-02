@@ -25,22 +25,25 @@ public class Events {
         }
 
         try(Connection con = DataSource.getConnection()) {
-            String query = "INSERT INTO events VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+            String query = "INSERT INTO events VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
             PreparedStatement statement = con.prepareStatement(query);
             statement.setString(1, event.getId());
             statement.setString(2, event.getName());
-            statement.setString(3, event.getPlace());
-            statement.setDate(4, Date.valueOf(event.getDate()));
-            statement.setString(5, event.getImageUrl());
-            statement.setInt(6, event.getAvailability());
-            statement.setInt(7, event.getTotal());
-            statement.setString(8,event.getDescription());
-            statement.setString(9, event.getHost());
-            statement.setTime(10, from);
-            statement.setString(11, event.getHostId());
-            statement.setInt(12, event.getDuration());
-            statement.setString(13, event.getLanguage());
-            statement.setString(14, event.getGenre());
+            statement.setString(3, event.getAddress());
+            statement.setString(4, event.getCity());
+            statement.setString(5, event.getState());
+            statement.setString(6, event.getCountry());
+            statement.setString(7, event.getZip());
+            statement.setDate(8, Date.valueOf(event.getDate(false)));
+            statement.setTime(9, from);
+            statement.setInt(10, event.getDuration());
+            statement.setString(11, event.getImageUrl());
+            statement.setInt(12, event.getAvailability());
+            statement.setInt(13, event.getTotal());
+            statement.setString(14, event.getDescription());
+            statement.setString(15, event.getHostId());
+            statement.setString(16, event.getLanguage());
+            statement.setString(17, event.getGenre());
             statement.executeUpdate();
 
             isInserted = true;
@@ -55,19 +58,24 @@ public class Events {
         List<Event> allEvents = new ArrayList<>();
 
         try(Connection con = DataSource.getConnection()) {
-            String query = "SELECT eventId, name, image, place, fromTime, duration, date, description, hostId FROM events;";
+            String query = "SELECT id, name, imageUrl, address, city, state, country, zip, fromTime, duration, date, description, hostId FROM events;";
             PreparedStatement statement = con.prepareStatement(query);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                Event event = new Event(resultSet.getString("eventId"),
+                Event event = new Event(resultSet.getString("id"),
                                         resultSet.getString("name"),
-                                        resultSet.getString("place"),
                                         resultSet.getDate("date").toString(),
                                         resultSet.getTime("fromTime").toString(),
                                         resultSet.getInt("duration"));
-                event.setImageUrl(resultSet.getString("image"));
+                event.setImageUrl(resultSet.getString("imageUrl"));
                 event.setDescription(resultSet.getString("description"));
                 event.setHostId(resultSet.getString("hostId"));
+                event.setAddress(resultSet.getString("address"));
+                event.setCity(resultSet.getString("city"));
+                event.setState(resultSet.getString("state"));
+                event.setCountry(resultSet.getString("country"));
+                event.setZip(resultSet.getString("zip"));
+
                 allEvents.add(event);
             }
         } catch (SQLException sqlException) {
@@ -82,25 +90,28 @@ public class Events {
         Event event = null;
 
         try(Connection con = DataSource.getConnection()) {
-            String query = "SELECT * FROM events WHERE eventId = ?;";
+            String query = "SELECT * FROM events WHERE id = ?;";
             PreparedStatement statement = con.prepareStatement(query);
             statement.setString(1, id);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                event = new Event(resultSet.getString("eventId"),
+                event = new Event(resultSet.getString("id"),
                         resultSet.getString("name"),
-                        resultSet.getString("place"),
                         resultSet.getDate("date").toString(),
                         resultSet.getTime("fromTime").toString(),
                         resultSet.getInt("duration"));
-                event.setImageUrl(resultSet.getString("image"));
+                event.setImageUrl(resultSet.getString("imageUrl"));
                 event.setAvailability(resultSet.getInt("availability"));
                 event.setTotal(resultSet.getInt("total"));
                 event.setDescription(resultSet.getString("description"));
-                event.setHost(resultSet.getString("host"));
                 event.setHostId(resultSet.getString("hostId"));
                 event.setLanguage(resultSet.getString("language"));
                 event.setGenre(resultSet.getString("genre"));
+                event.setAddress(resultSet.getString("address"));
+                event.setCity(resultSet.getString("city"));
+                event.setState(resultSet.getString("state"));
+                event.setCountry(resultSet.getString("country"));
+                event.setZip(resultSet.getString("zip"));
             }
         } catch (SQLException sqlException) {
             System.err.printf("Error while getting %s event information from the table. %s\n", id, sqlException.getMessage());
