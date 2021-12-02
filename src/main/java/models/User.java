@@ -66,6 +66,14 @@ public class User {
     }
 
     public String getPhone() {
+        if(Strings.isNullOrEmpty(phone)&&
+                !Strings.isNullOrEmpty(countryCode) &&
+                !Strings.isNullOrEmpty(areaCode) &&
+                !Strings.isNullOrEmpty(exchangeCode) &&
+                !Strings.isNullOrEmpty(lineNumber)) {
+            return String.format("%s-%s-%s-%s", countryCode, areaCode, exchangeCode, lineNumber);
+        }
+
         return phone;
     }
 
@@ -77,7 +85,7 @@ public class User {
                 areaCode = parts[1];
                 exchangeCode = parts[2];
                 lineNumber = parts[3];
-                phone = String.format("+%s-%s-%s-%s", countryCode, areaCode, exchangeCode, lineNumber);
+                phone = String.format("%s-%s-%s-%s", countryCode, areaCode, exchangeCode, lineNumber);
             }
         }
 
@@ -85,10 +93,6 @@ public class User {
     }
 
     public String getImage() {
-        if(Strings.isNullOrEmpty(this.image)) {
-            image = "/images/profilePic.png";
-        }
-
         return image;
     }
 

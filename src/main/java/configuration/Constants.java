@@ -33,7 +33,7 @@ public class Constants {
     public static final String NAME_KEY = "name";
     public static final String EMAIL_KEY = "email";
 
-    public static final String EVENTS_DIRECTORY = "event-photos";
+    public static final String PHOTOS_DIRECTORY = "event-photos";
 
     //Error messages
     public static final String ERROR_MESSAGE = "Oops! Some problem occurred. Try again later!. Contact customer support if problem persist.";

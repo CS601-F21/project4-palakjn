@@ -71,9 +71,9 @@ public class EventsController {
         if(!file.isEmpty()) {
             System.out.printf("File is not empty %s. \n", file.getOriginalFilename());
 
-            if(FileStorage.exists(Constants.EVENTS_DIRECTORY)) {
+            if(FileStorage.exists(Constants.PHOTOS_DIRECTORY)) {
                 String fileName = getFileName(event.getId(), file.getOriginalFilename());
-                boolean fileCreated = FileStorage.createFile(file, Constants.EVENTS_DIRECTORY, fileName);
+                boolean fileCreated = FileStorage.createFile(file, Constants.PHOTOS_DIRECTORY, fileName);
                 if(fileCreated) {
                     event.setImageUrl(fileName);
                 }

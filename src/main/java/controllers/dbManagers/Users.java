@@ -110,11 +110,16 @@ public class Users {
         return user;
     }
 
-    public static boolean updateUser(User user) {
+    public static boolean updateUser(User user, boolean withPhoto) {
         boolean isUpdated = false;
 
         try (Connection con = DataSource.getConnection()) {
-            String query = "UPDATE users SET dob = ?, phone = ?, address = ?, city = ?, state = ?, country = ?, zip = ?, imageUrl = ? WHERE id = ?";
+            String query = null;
+            if(withPhoto) {
+               query = "UPDATE users SET dob = ?, phone = ?, address = ?, city = ?, state = ?, country = ?, zip = ?, imageUrl = ? WHERE id = ?";
+            } else {
+                query = "UPDATE users SET dob = ?, phone = ?, address = ?, city = ?, state = ?, country = ?, zip = ? WHERE id = ?";
+            }
             PreparedStatement statement = con.prepareStatement(query);
             statement.setDate(1, Date.valueOf(user.getDob(false)));
             statement.setString(2, user.getPhone());
@@ -123,8 +128,12 @@ public class Users {
             statement.setString(5, user.getState());
             statement.setString(6, user.getCountry());
             statement.setString(7, user.getZip());
-            statement.setString(8, user.getImage());
-            statement.setString(9, user.getId());
+            if(withPhoto) {
+                statement.setString(8, user.getImage());
+                statement.setString(9, user.getId());
+            } else {
+                statement.setString(8, user.getId());
+            }
 
             statement.executeUpdate();
 
