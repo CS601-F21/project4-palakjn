@@ -82,7 +82,7 @@
 }
 
 #event-details .host-border {
-    height: 150px;
+    height: 250px;
 }
 
 #event-details .share-event {
@@ -111,7 +111,7 @@
 
 #event-details .host-image {
     width: 50%;
-    height: 100px;
+    height: 180px;
     float: left;
     margin-right: 30px;
     border-radius: 100px;
@@ -119,8 +119,10 @@
 
 #event-details .host-name {
     text-align: left;
-    padding-top: 25px;
     font-family: "Ubuntu";
+    height: 180px;
+    display:table-cell;
+    vertical-align: middle;
 }
 
 #event-details .share-button {

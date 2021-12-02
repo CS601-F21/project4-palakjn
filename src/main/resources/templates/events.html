@@ -27,7 +27,12 @@
             <div class="card-columns">
                 <div class="card" th:each="event : ${events}">
                     <div class="card-body card-header">
-                        <img class="card-img-top" th:src="@{/event-photos/{path} (path=${event.imageUrl})}" alt="Event Image">
+                        <div th:if="${event.imageUrl == null}">
+                            <img class="card-img-top" th:src="@{/images/default.png}" alt="Event Image">
+                        </div>
+                        <div th:unless="${event.imageUrl == null}">
+                            <img class="card-img-top" th:src="@{/event-photos/{path} (path=${event.imageUrl})}" alt="Event Image">
+                        </div>
                         <span th:if="${userId != null}">
                             <div class="dropdown show card-img-overlay options">
                                 <a class="card-dropdown-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -63,6 +68,22 @@
     </section>
 
     <span th:if="${userId != null}"><div style="height:400px; width:100%; clear:both;"></div></span>
-    <span th:if="${userId == null}"><div th:replace="common/index :: foot"></div></span>
+    <span th:if="${userId == null}">
+        <div th:replace="common/index :: foot"></div>
+    </span>
+
+    <script th:inline="javascript">
+         //Resource: https://newbedev.com/how-to-keep-footer-at-the-bottom-even-with-dynamic-height-website
+
+        $(document).ready(function() {
+            var docHeight = $(window).height();
+            var footerHeight = $('#footer').height();
+            var footerTop = $('#footer').position().top + footerHeight;
+
+            if (footerTop < docHeight) {
+                $('#footer').css('margin-top', 10+ (docHeight - footerTop) + 'px');
+            }
+        });
+    </script>
 </body>
 </html>

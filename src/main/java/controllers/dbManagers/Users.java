@@ -61,17 +61,19 @@ public class Users {
         return name;
     }
 
-    public static User getUserIdAndName(String userId) {
+    public static User getUserInfo(String userId) {
         User user = new User();
 
         try (Connection con = DataSource.getConnection()) {
-            String query = "SELECT id, name FROM users WHERE id = ?;";
+            String query = "SELECT id, name, imageUrl, phone FROM users WHERE id = ?;";
             PreparedStatement statement = con.prepareStatement(query);
             statement.setString(1, userId);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 user.setName(resultSet.getString("name"));
                 user.setId(resultSet.getString("id"));
+                user.setImage(resultSet.getString("imageUrl"));
+                user.setPhone(resultSet.getString("phone"));
             }
         } catch (SQLException sqlException) {
             System.err.printf("Error while getting user %s information. %s.\n", userId, sqlException.getMessage());

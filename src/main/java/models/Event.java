@@ -177,10 +177,6 @@ public class Event {
     }
 
     public String getImageUrl() {
-        if(Strings.isNullOrEmpty(imageUrl)) {
-            imageUrl = "/images/default.png";
-        }
-
         return imageUrl;
     }
 

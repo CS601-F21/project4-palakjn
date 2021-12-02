@@ -102,7 +102,7 @@ public class EventsController {
             model.addAttribute("event", event);
 
             //Getting event host information from database
-            User user = Users.getUserIdAndName(event.getHostId());
+            User user = Users.getUserInfo(event.getHostId());
             if(user != null) {
                 model.addAttribute("user", user);
 
