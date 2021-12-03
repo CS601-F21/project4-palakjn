@@ -11,9 +11,9 @@ public class FileStorage {
 
     public static boolean createDirectory(String directory) {
         boolean created = false;
+        Path path = Paths.get(directory);
 
         try {
-            Path path = Paths.get(directory);
             if(!Files.exists(path)) {
                 Files.createDirectory(path);
             }
@@ -34,9 +34,9 @@ public class FileStorage {
 
     public static boolean createFile(MultipartFile file, String directory, String fileName) {
         boolean created = false;
+        Path path = Paths.get(directory, "/", fileName);
 
         try {
-            Path path = Paths.get(directory, "/", fileName);
             Files.write(path, file.getBytes());
             created = true;
 
@@ -46,5 +46,21 @@ public class FileStorage {
         }
 
         return created;
+    }
+
+    public static boolean deleteFile(String directory, String fileName) {
+        boolean deleted = false;
+        Path path = Paths.get(directory, "/", fileName);
+
+        try {
+            Files.deleteIfExists(path);
+            deleted = true;
+
+            System.out.printf("Deleted a file %s at a location %s.\n", fileName, directory);
+        } catch (IOException ioException) {
+            System.err.printf("Unable to delete file %s/%s. %s.\n", directory, fileName, ioException);
+        }
+
+        return deleted;
     }
 }

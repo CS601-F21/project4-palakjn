@@ -157,4 +157,32 @@ public class EventsController {
 
         return "redirect:/events/" + eventId;
     }
+
+    @GetMapping("/events/delete/{eventId}")
+    public String deleteEvent(@PathVariable("eventId") String eventId, Model model, HttpServletRequest request) {
+        System.out.printf("Request comes at GET /events/delete/%s route with session id: %s.\n", eventId, request.getSession(true).getId());
+
+        Object userInfo = request.getSession().getAttribute(Constants.CLIENT_USER_ID);
+        if(userInfo == null) {
+            //User is not being authorized
+            return "redirect:/";
+        }
+
+        //First getting the image url from storage
+        String imageUrl = Events.getEventImage(eventId);
+
+        //Deleting the event from the database
+        boolean isDeleted = Events.deleteEvent(eventId);
+
+        if(isDeleted) {
+            //If deleted then, going to delete image file if locally stored.
+            System.out.printf("Deleted event: %s.\n", eventId);
+
+            if(!Strings.isNullOrEmpty(imageUrl)) {
+                FileStorage.deleteFile(Constants.PHOTOS_DIRECTORY, imageUrl);
+            }
+        }
+
+        return "redirect:/events";
+    }
 }

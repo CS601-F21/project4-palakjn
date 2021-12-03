@@ -115,6 +115,25 @@ public class Events {
         return event;
     }
 
+    public static String getEventImage(String id) {
+        String imageUrl = null;
+
+        try(Connection con = DataSource.getConnection()) {
+            String query = "SELECT imageUrl FROM events WHERE id = ?;";
+            PreparedStatement statement = con.prepareStatement(query);
+            statement.setString(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                imageUrl = resultSet.getString("imageUrl");
+            }
+        } catch (SQLException sqlException) {
+            System.err.printf("Error while getting %s event information from the table. %s\n", id, sqlException.getMessage());
+            imageUrl = null;
+        }
+
+        return imageUrl;
+    }
+
     public static Event getEventSeats(String id) {
         Event event = null;
 
@@ -182,6 +201,23 @@ public class Events {
         }
 
         return isUpdated;
+    }
+
+    public static boolean deleteEvent(String id) {
+        boolean isDeleted = false;
+
+        try(Connection con = DataSource.getConnection()) {
+            String query = "DELETE FROM events WHERE id = ?";
+            PreparedStatement statement = con.prepareStatement(query);
+            statement.setString(1, id);
+            statement.executeUpdate();
+
+            isDeleted = true;
+        } catch (SQLException sqlException) {
+            System.err.printf("Error while deleting an event with id as %s. %s.\n", id, sqlException.getMessage());
+        }
+
+        return isDeleted;
     }
 
     private static Time getTime(String time) {
