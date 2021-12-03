@@ -1,13 +1,16 @@
 package utilities;
 import configuration.Constants;
 import models.ClientInfo;
+import models.Event;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.StringReader;
 import java.util.Base64;
 import java.util.Map;
+import java.util.Optional;
 
-public class LoginUtilities {
+public class WebUtilities {
 
     public static String generateNonce(String sessionId) {
         String sha256hex = DigestUtils.sha256Hex(sessionId);
@@ -114,6 +117,36 @@ public class LoginUtilities {
 
         // extract name from response and return
         return new ClientInfo((String) payloadMap.get(Constants.NAME_KEY), (String) payloadMap.get(Constants.EMAIL_KEY));
+    }
+
+    public static String downloadImage(MultipartFile file, String uniqueId) {
+        String imageUrl = null;
+
+        if(!file.isEmpty()) {
+            System.out.printf("File is not empty %s. \n", file.getOriginalFilename());
+
+            if(FileStorage.exists(Constants.PHOTOS_DIRECTORY)) {
+                String fileName = getFileName(uniqueId, file.getOriginalFilename());
+                boolean fileCreated = FileStorage.createFile(file, Constants.PHOTOS_DIRECTORY, fileName);
+                if(fileCreated) {
+                    imageUrl = fileName;
+                }
+            }
+        }
+
+        return imageUrl;
+    }
+
+    private static String getFileName(String eventId, String fileName) {
+        String extension = getExtension(fileName).isPresent() ? getExtension(fileName).get() : ".png";
+        return String.format("%s.%s", eventId, extension);
+    }
+
+    //https://www.baeldung.com/java-file-extension
+    private static Optional<String> getExtension(String filename) {
+        return Optional.ofNullable(filename)
+                .filter(f -> f.contains("."))
+                .map(f -> f.substring(filename.lastIndexOf(".") + 1));
     }
 
     /**

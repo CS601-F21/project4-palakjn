@@ -5,7 +5,7 @@ import configuration.Constants;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import utilities.LoginUtilities;
+import utilities.WebUtilities;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -24,10 +24,10 @@ public class HomeController {
             return "redirect:/dashboard";
         }
 
-        String nonce = LoginUtilities.generateNonce(sessionId);
+        String nonce = WebUtilities.generateNonce(sessionId);
 
         // Generate url for request to Slack
-        String url = LoginUtilities.generateSlackAuthorizeURL(Config.getClientId(),
+        String url = WebUtilities.generateSlackAuthorizeURL(Config.getClientId(),
                 sessionId,
                 nonce,
                 Config.getRedirectUrl());

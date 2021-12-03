@@ -46,62 +46,62 @@
                       </button>
                     </div>
 
-                    <form th:action="@{/profile}" th:object="${userWithUpdatedProfile}" method="post" enctype="multipart/form-data">
+                    <form th:action="@{/profile}" method="post" enctype="multipart/form-data">
                       <div class="modal-body">
                         <div class="form-row">
                           <div class="col-md-12 mb-3">
                             <label>Address*</label>
-                            <input type="text" class="form-control" placeholder="Address" th:field="*{address}" required>
+                            <input type="text" class="form-control" placeholder="Address" th:field="*{user.address}" required>
                           </div>
                         </div>
                         <div class="form-row">
                           <div class="col-md-3 mb-3">
                             <label>City*</label>
                             <label>
-                              <input type="text" class="form-control" placeholder="City" th:field="*{city}" required>
+                              <input type="text" class="form-control" placeholder="City" th:field="*{user.city}" required>
                             </label>
                           </div>
                           <div class="col-md-3 mb-3">
                             <label>State*</label>
                             <label>
-                              <input type="text" class="form-control" placeholder="State"  th:field="*{state}" required>
+                              <input type="text" class="form-control" placeholder="State"  th:field="*{user.state}" required>
                             </label>
                           </div>
                           <div class="col-md-3 mb-3">
                             <label>Country*</label>
                             <label>
-                              <input type="text" class="form-control" placeholder="Country" th:field="*{country}" required>
+                              <input type="text" class="form-control" placeholder="Country" th:field="*{user.country}" required>
                             </label>
                           </div>
                           <div class="col-md-3 mb-3">
                             <label>Zip*</label>
                             <label>
-                              <input type="text" class="form-control" placeholder="Zip"  th:field="*{zip}" required>
+                              <input type="text" class="form-control" placeholder="Zip"  th:field="*{user.zip}" required>
                             </label>
                           </div>
                         </div>
                         <div class="form-row">
                           <div class="col-md-6 mb-3">
                             <label>Date Of Birth*</label>
-                            <input type="date" class="form-control" placeholder="Date"  th:field="*{dob}" required/>
+                            <input type="date" class="form-control" placeholder="Date"  th:field="*{user.dob}" required/>
                           </div>
                           <div class="col-md-6 mb-3">
                             <label>Phone Number*</label>
                             <div class="row" style="text-align: right;">
                               <div class="col-md-2" style="padding-right: 1px;">
-                                <input type="text" class="form-control" style="text-align: center;" th:field="*{countryCode}" required/>
+                                <input type="text" class="form-control" style="text-align: center;" th:field="*{user.countryCode}" th:size="2" th:maxlength="2" pattern="[+]{1}[0-9]{1}" title="Plus followed by one numeric digit" required/>
                               </div>
                               <span style="text-align: center; padding-top: 5px;">&nbsp;-&nbsp;</span>
                               <div class="col-md-2"  style="padding-left: 1px; padding-right: 1px;">
-                                <input type="text" class="form-control"  style="text-align: center;" th:field="*{areaCode}" required/>
+                                <input type="text" class="form-control" style="text-align: center;" th:field="*{user.areaCode}" th:size="3" th:maxlength="3" pattern="[0-9]{3}" title="Three numeric digits" required/>
                               </div>
                               <span style="text-align: center; padding-top: 5px;">&nbsp;-&nbsp;</span>
                               <div class="col-md-3"  style="padding-left: 1px; padding-right: 1px;">
-                                <input type="text" class="form-control" style="text-align: center;" th:field="*{exchangeCode}" required/>
+                                <input type="text" class="form-control" style="text-align: center;" th:field="*{user.exchangeCode}" th:size="3" th:maxlength="3" pattern="[0-9]{3}" title="Three numeric digits" required/>
                               </div>
                               <span style="text-align: center; padding-top: 5px;">&nbsp;-&nbsp;</span>
                               <div class="col-md-3"  style="padding-left: 1px;">
-                                <input type="text" class="form-control" style="text-align: center;" th:field="*{lineNumber}" required/>
+                                <input type="text" class="form-control" style="text-align: center;" th:field="*{user.lineNumber}" th:size="4" th:maxlength="4" pattern="[0-9]{4}" title="Four numeric digits" required/>
                               </div>
                             </div>
                           </div>

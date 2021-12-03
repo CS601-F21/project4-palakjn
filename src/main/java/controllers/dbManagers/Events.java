@@ -13,14 +13,8 @@ public class Events {
 
     public static boolean insert(Event event) {
         boolean isInserted = false;
-        Time from;
-
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("hh:mm");
-            long ms = sdf.parse(event.getFrom()).getTime();
-            from = new Time(ms);
-        } catch (ParseException exception) {
-            exception.printStackTrace();
+        Time from = getTime(event.getFrom());
+        if(from == null) {
             return false;
         }
 
@@ -119,5 +113,88 @@ public class Events {
         }
 
         return event;
+    }
+
+    public static Event getEventSeats(String id) {
+        Event event = null;
+
+        try(Connection con = DataSource.getConnection()) {
+            String query = "SELECT availability, total FROM events WHERE id = ?;";
+            PreparedStatement statement = con.prepareStatement(query);
+            statement.setString(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                event = new Event();
+                event.setAvailability(resultSet.getInt("availability"));
+                event.setTotal(resultSet.getInt("total"));
+            }
+        } catch (SQLException sqlException) {
+            System.err.printf("Error while getting %s event information from the table. %s\n", id, sqlException.getMessage());
+            event = null;
+        }
+
+        return event;
+    }
+
+    public static boolean updateEvent(Event event, boolean withImage) {
+        boolean isUpdated;
+        Time from = getTime(event.getFrom());
+        if(from == null) {
+            return false;
+        }
+
+        try(Connection con = DataSource.getConnection()) {
+            String query;
+
+            if(withImage) {
+                query = "UPDATE events SET name = ?, date = ?, fromTime = ?, duration = ?, availability = ?, total = ?, description = ?, hostId = ?, language = ?, genre = ?, address = ?, city = ?, state = ?, country = ?, zip = ?, imageUrl = ? WHERE id = ?";
+            } else {
+                query = "UPDATE events SET name = ?, date = ?, fromTime = ?, duration = ?, availability = ?, total = ?, description = ?, hostId = ?, language = ?, genre = ?, address = ?, city = ?, state = ?, country = ?, zip = ? WHERE id = ?";
+            }
+            PreparedStatement statement = con.prepareStatement(query);
+            statement.setString(1, event.getName());
+            statement.setDate(2, Date.valueOf(event.getDate(false)));
+            statement.setTime(3, from);
+            statement.setInt(4, event.getDuration());
+            statement.setInt(5, event.getAvailability());
+            statement.setInt(6, event.getTotal());
+            statement.setString(7, event.getDescription());
+            statement.setString(8, event.getHostId());
+            statement.setString(9, event.getLanguage());
+            statement.setString(10, event.getGenre());
+            statement.setString(11, event.getAddress());
+            statement.setString(12, event.getCity());
+            statement.setString(13, event.getState());
+            statement.setString(14, event.getCountry());
+            statement.setString(15, event.getZip());
+            if(withImage) {
+                statement.setString(16, event.getImageUrl());
+                statement.setString(17, event.getId());
+            } else {
+                statement.setString(16, event.getId());
+            }
+            statement.executeUpdate();
+
+            isUpdated = true;
+        } catch (SQLException sqlException) {
+            System.err.printf("Error while updating event with the name as %s. %s\n", event.getName(), sqlException.getMessage());
+            isUpdated = false;
+        }
+
+        return isUpdated;
+    }
+
+    private static Time getTime(String time) {
+        Time from = null;
+
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("hh:mm");
+            long ms = sdf.parse(time).getTime();
+            from = new Time(ms);
+        } catch (ParseException exception) {
+            exception.printStackTrace();
+        }
+
+        return from;
     }
 }

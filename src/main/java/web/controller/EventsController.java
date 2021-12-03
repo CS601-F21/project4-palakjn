@@ -11,7 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import utilities.FileStorage;
-import utilities.LoginUtilities;
+import utilities.Strings;
+import utilities.WebUtilities;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -41,10 +42,10 @@ public class EventsController {
         }
         else {
             //User is not logged in. Will display all events but will not allow book/edit/delete option
-            String nonce = LoginUtilities.generateNonce(sessionId);
+            String nonce = WebUtilities.generateNonce(sessionId);
 
             // Generate url for request to Slack
-            String url = LoginUtilities.generateSlackAuthorizeURL(Config.getClientId(),
+            String url = WebUtilities.generateSlackAuthorizeURL(Config.getClientId(),
                     sessionId,
                     nonce,
                     Config.getRedirectUrl());
@@ -67,19 +68,7 @@ public class EventsController {
         String userId = (String) userInfo;
 
         event.setId(UUID.randomUUID().toString());
-
-        if(!file.isEmpty()) {
-            System.out.printf("File is not empty %s. \n", file.getOriginalFilename());
-
-            if(FileStorage.exists(Constants.PHOTOS_DIRECTORY)) {
-                String fileName = getFileName(event.getId(), file.getOriginalFilename());
-                boolean fileCreated = FileStorage.createFile(file, Constants.PHOTOS_DIRECTORY, fileName);
-                if(fileCreated) {
-                    event.setImageUrl(fileName);
-                }
-            }
-        }
-
+        event.setImageUrl(WebUtilities.downloadImage(file, event.getId()));
         event.setAvailability(event.getTotal());
         event.setHostId(userId);
 
@@ -95,6 +84,7 @@ public class EventsController {
 
     @GetMapping("/events/{eventId}")
     public String getEvent(@PathVariable("eventId") String eventId, Model model, HttpServletRequest request) {
+        System.out.printf("Request comes at Get /events/%s route with session id: %s.\n", eventId, request.getSession(true).getId());
 
         //Getting event information from database
         Event event = Events.getEvent(eventId);
@@ -113,10 +103,10 @@ public class EventsController {
                     model.addAttribute("userId", userInfo);
                 } else {
                     //User is not logged in. Will display all events but will not allow book/edit/delete option
-                    String nonce = LoginUtilities.generateNonce(sessionId);
+                    String nonce = WebUtilities.generateNonce(sessionId);
 
                     // Generate url for request to Slack
-                    String url = LoginUtilities.generateSlackAuthorizeURL(Config.getClientId(),
+                    String url = WebUtilities.generateSlackAuthorizeURL(Config.getClientId(),
                             sessionId,
                             nonce,
                             Config.getRedirectUrl());
@@ -135,15 +125,36 @@ public class EventsController {
         return "event";
     }
 
-    private String getFileName(String eventId, String fileName) {
-        String extension = getExtension(fileName).isPresent() ? getExtension(fileName).get() : ".png";
-        return String.format("%s.%s", eventId, extension);
-    }
+    @PostMapping("/events/{eventId}")
+    public String updateEvent(@PathVariable("eventId") String eventId, @RequestParam("image") MultipartFile file, @ModelAttribute Event event, HttpServletRequest request) {
+        System.out.printf("Request comes at POST /events/%s route with session id: %s.\n", eventId, request.getSession(true).getId());
 
-    //https://www.baeldung.com/java-file-extension
-    private Optional<String> getExtension(String filename) {
-        return Optional.ofNullable(filename)
-                .filter(f -> f.contains("."))
-                .map(f -> f.substring(filename.lastIndexOf(".") + 1));
+        Object userInfo = request.getSession().getAttribute(Constants.CLIENT_USER_ID);
+        if(userInfo == null) {
+            //User is not being authorized
+            return "redirect:/";
+        }
+        String userId = (String) userInfo;
+
+        event.setId(eventId);
+        event.setHostId(userId);
+
+        Event eventWithOldSeats = Events.getEventSeats(event.getId());
+        if(eventWithOldSeats != null && (eventWithOldSeats.getAvailability() != 0 || eventWithOldSeats.getTotal() >= event.getTotal())) {
+            event.setAvailability(eventWithOldSeats.getAvailability() + (event.getTotal() - eventWithOldSeats.getTotal()));
+        }
+
+        String imageUrl = WebUtilities.downloadImage(file, event.getId());
+
+        if(!Strings.isNullOrEmpty(imageUrl)) {
+            event.setImageUrl(imageUrl);
+            Events.updateEvent(event, true);
+        } else {
+            Events.updateEvent(event, false);
+        }
+
+        System.out.printf("Update profile for event: %s", event.getName());
+
+        return "redirect:/events/" + eventId;
     }
 }

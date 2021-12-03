@@ -7,7 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import controllers.dbManagers.Users;
-import utilities.LoginUtilities;
+import utilities.WebUtilities;
 import controllers.ServiceHandler;
 import utilities.Strings;
 
@@ -33,16 +33,16 @@ public class LoginController {
         // retrieve the code provided by Slack
         String code = request.getParameter(Constants.CODE_KEY);
 
-        String url = LoginUtilities.generateSlackTokenURL(Config.getClientId(),
+        String url = WebUtilities.generateSlackTokenURL(Config.getClientId(),
                                                           Config.getClientSecret(),
                                                           code,
                                                           Config.getRedirectUrl());
 
         // Make the request to the token API
         String responseString = ServiceHandler.send(url, Constants.METHOD.GET);
-        Map<String, Object> response = LoginUtilities.jsonStrToMap(responseString);
+        Map<String, Object> response = WebUtilities.jsonStrToMap(responseString);
 
-        ClientInfo clientInfo = LoginUtilities.verifyTokenResponse(response, sessionId);
+        ClientInfo clientInfo = WebUtilities.verifyTokenResponse(response, sessionId);
 
         if(clientInfo == null) {
             System.out.println("Oops! Login Unsuccessful");

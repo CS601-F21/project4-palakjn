@@ -1,6 +1,6 @@
 #event-heading .container-fluid{
     padding: 2% 10% 0% 10%;
-  }
+}
 
 .event-border {
       border-style: solid;
@@ -25,6 +25,25 @@
     text-align: center;
 }
 
+#event-heading .card-dropdown-link {
+    cursor: pointer;
+    color: white;
+    padding-right: 10px;
+}
+
+#event-heading .options {
+    text-align: right;
+    font-size: 1.8rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    width: 80%;
+    height: 100%;
+    padding: 10px;
+}
+
 #event-heading .event-title {
     margin-top: 20px;
     margin-left: 10px;
@@ -43,16 +62,16 @@
 
 #event-heading .book-button {
     font-family: "Montserrat-Light";
-      font-size: 1.8rem;
-      font-weight: bold;
-      line-height: 18px;
-      text-align: center;
-      border-radius: 20px;
-      width: 150px;
-      height: 40px;
-      background: #ff4c68;
-      border-color: #ff4c68;
-      color: white;
+    font-size: 1.8rem;
+    font-weight: bold;
+    line-height: 18px;
+    text-align: center;
+    border-radius: 20px;
+    width: 150px;
+    height: 40px;
+    background: #ff4c68;
+    border-color: #ff4c68;
+    color: white;
 }
 
 #event-heading .book-button:hover {

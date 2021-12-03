@@ -33,23 +33,15 @@
                         <div th:unless="${event.imageUrl == null}">
                             <img class="card-img-top" th:src="@{/event-photos/{path} (path=${event.imageUrl})}" alt="Event Image">
                         </div>
-                        <span th:if="${userId != null}">
-                            <div class="dropdown show card-img-overlay options">
-                                <a class="card-dropdown-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-ellipsis-v"></i>
-                                </a>
+                        <div class="dropdown show card-img-overlay options">
+                            <a class="card-dropdown-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </a>
 
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                    <a class="dropdown-item" th:href="@{/events/{path}(path=${event.id})}">View</a>
-                                    <span th:if="${event.hostId} eq ${userId}">
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="#">Edit</a>
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="#">Delete</a>
-                                    </span>
-                                </div>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                <a class="dropdown-item" th:href="@{/events/{path}(path=${event.id})}">View</a>
                             </div>
-                        </span>
+                        </div>
                     </div>
                     <div class="card-body card-footer">
                         <h3 class="card-title"><span th:text="${event.name}"></span></h3>
