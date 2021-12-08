@@ -9,10 +9,11 @@ import models.Ticket;
 import models.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 public class TicketController {
@@ -39,7 +40,6 @@ public class TicketController {
             //User is not being authorized
             return "redirect:/";
         }
-        List<Ticket> allTickets = null;
 
         List<Ticket> tickets = Tickets.getTickets(userInfo.toString(), isNew);
         if(tickets != null) {
@@ -69,5 +69,35 @@ public class TicketController {
 
         model.addAttribute("isNew", isNew);
         return "tickets";
+
+
+    }
+
+    @PostMapping("/tickets/{ticketId}/share")
+    public String upcomingEvents(@PathVariable("ticketId") String ticketId, @RequestParam("selectedUser") String userId, Model model, HttpServletRequest request) {
+        String sessionId = request.getSession(true).getId();
+        System.out.printf("Request comes at /tickets/%s/share route with session id: %s.\n", ticketId, sessionId);
+
+        Object userInfo = request.getSession().getAttribute(Constants.CLIENT_USER_ID);
+        if(userInfo == null) {
+            //User is not being authorized
+            return "redirect:/";
+        }
+
+        Ticket ticket = Tickets.getTicket(ticketId);
+        if(ticket != null) {
+            ticket.setId(UUID.randomUUID().toString());
+            ticket.setUserId(userId);
+
+            //Inserting ticket information to table
+            boolean isSuccess = Tickets.insert(ticket);
+            if(isSuccess) {
+                System.out.printf("Added ticket %s information to table.\n", ticket.getId());
+            } else {
+                //TODO: Handle the error
+            }
+        }
+
+        return "redirect:/tickets/upcomingEvents";
     }
 }

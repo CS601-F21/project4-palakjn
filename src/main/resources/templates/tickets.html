@@ -78,8 +78,8 @@
 
                                             <form th:action="@{/tickets/{path}/share (path = ${ticket.id})}" method="post">
                                                 <div class="modal-body" style="text-align: center;">
-                                                    <select class="form-select" aria-label="Default select example" th:each="user : ${users}">
-                                                        <option th:value="${user.id}" th:text="${user.name}"></option>
+                                                    <select class="form-select" aria-label="Default select example" name="selectedUser">
+                                                        <option th:each="user : ${users}" th:value="${user.id}" th:text="${user.name}"></option>
                                                     </select>
                                                 </div>
                                                 <div class="modal-footer">

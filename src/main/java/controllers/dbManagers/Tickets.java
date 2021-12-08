@@ -61,4 +61,28 @@ public class Tickets {
 
         return tickets;
     }
+
+    public static Ticket getTicket(String ticketId) {
+        Ticket ticket = null;
+
+        try(Connection con = DataSource.getConnection()) {
+            String query = "SELECT * FROM tickets WHERE id = ?;";
+
+            PreparedStatement statement = con.prepareStatement(query);
+            statement.setString(1, ticketId);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                ticket = new Ticket();
+                ticket.setId(resultSet.getString("id"));
+                ticket.setEventId(resultSet.getString("eventId"));
+                ticket.setUserId(resultSet.getString("userId"));
+                ticket.setNumOfTickets(resultSet.getInt("numOfTickets"));
+            }
+        } catch (SQLException sqlException) {
+            System.err.printf("Error while getting ticket %s information. %s\n", ticketId, sqlException.getMessage());
+            ticket = null;
+        }
+
+        return ticket;
+    }
 }
