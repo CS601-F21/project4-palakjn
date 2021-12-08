@@ -4,6 +4,8 @@ import controllers.DataSource;
 import models.User;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Users {
 
@@ -110,6 +112,29 @@ public class Users {
         }
 
         return user;
+    }
+
+    public static List<User> getUsersExcept(String userId) {
+        List<User> users = new ArrayList<>();
+
+        try (Connection con = DataSource.getConnection()) {
+            String query = "SELECT id, name FROM users WHERE id != ?;";
+            PreparedStatement statement = con.prepareStatement(query);
+            statement.setString(1, userId);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                User user = new User();
+                user.setId(resultSet.getString("id"));
+                user.setName(resultSet.getString("name"));
+
+                users.add(user);
+            }
+        } catch (SQLException sqlException) {
+            System.err.printf("Error while getting all users information other than %s. %s.\n", userId, sqlException.getMessage());
+            users = null;
+        }
+
+        return users;
     }
 
     public static boolean updateUser(User user, boolean withPhoto) {

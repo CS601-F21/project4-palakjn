@@ -3,8 +3,10 @@ package web.controller;
 import configuration.Config;
 import configuration.Constants;
 import controllers.dbManagers.Events;
+import controllers.dbManagers.Tickets;
 import controllers.dbManagers.Users;
 import models.Event;
+import models.Ticket;
 import models.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -158,7 +160,7 @@ public class EventsController {
         return "redirect:/events/" + eventId;
     }
 
-    @GetMapping("/events/delete/{eventId}")
+    @GetMapping("/events/delete/{eventId}") //TODO: Change this to /events/{eventId}/delete
     public String deleteEvent(@PathVariable("eventId") String eventId, Model model, HttpServletRequest request) {
         System.out.printf("Request comes at GET /events/delete/%s route with session id: %s.\n", eventId, request.getSession(true).getId());
 
@@ -184,5 +186,44 @@ public class EventsController {
         }
 
         return "redirect:/events";
+    }
+
+    @PostMapping("/events/{eventId}/book")
+    public String getEvents(@PathVariable("eventId") String eventId, @RequestParam("numOfTickets") int numOfTickets, Model model, HttpServletRequest request) {
+        String sessionId = request.getSession(true).getId();
+        System.out.printf("Request comes at /events/%s/book route with session id: %s.\n", eventId, sessionId);
+
+        Object userInfo = request.getSession().getAttribute(Constants.CLIENT_USER_ID);
+        if(userInfo == null) {
+            //User is not being authorized
+            return "redirect:/";
+        }
+
+        //Create ticket object holding tickets information
+        Ticket ticket = new Ticket();
+        ticket.setId(UUID.randomUUID().toString());
+        ticket.setEventId(eventId);
+        ticket.setUserId(userInfo.toString());
+        ticket.setNumOfTickets(numOfTickets);
+        
+        //Inserting ticket information to table
+        boolean isSuccess = Tickets.insert(ticket);
+        if(isSuccess) {
+            System.out.printf("Added ticket %s information to table.\n", ticket.getId());
+
+            //get event current availability
+            Event event = Events.getEventSeats(eventId);
+            if(event != null) {
+                event.setAvailability((event.getAvailability() - numOfTickets));
+
+                Events.updateEventSeats(event);
+                System.out.println("Updated event availability information in DB");
+            } else {
+                //TODO: Handle error
+            }
+        }
+
+        //Redirecting user to tickets page to
+        return "redirect:/tickets/upcomingEvents";
     }
 }

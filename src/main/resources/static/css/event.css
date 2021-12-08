@@ -173,3 +173,7 @@
 #event-details .event-location-value, .event-description-value {
     font-family: "Ubuntu";
 }
+
+.label-for-book {
+    font-weight: bold;
+}

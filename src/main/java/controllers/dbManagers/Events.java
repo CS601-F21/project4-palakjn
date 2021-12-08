@@ -115,6 +115,35 @@ public class Events {
         return event;
     }
 
+    public static Event getEventForTicket(String id) {
+        Event event = null;
+
+        try(Connection con = DataSource.getConnection()) {
+            String query = "SELECT imageUrl, name, address, city, state, country, zip, date, fromTime FROM events WHERE id = ?;";
+            PreparedStatement statement = con.prepareStatement(query);
+            statement.setString(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                event = new Event(id,
+                        resultSet.getString("name"),
+                        resultSet.getDate("date").toString(),
+                        resultSet.getTime("fromTime").toString(),
+                        0);
+                event.setImageUrl(resultSet.getString("imageUrl"));
+                event.setAddress(resultSet.getString("address"));
+                event.setCity(resultSet.getString("city"));
+                event.setState(resultSet.getString("state"));
+                event.setCountry(resultSet.getString("country"));
+                event.setZip(resultSet.getString("zip"));
+            }
+        } catch (SQLException sqlException) {
+            System.err.printf("Error while getting %s event information from the table. %s\n", id, sqlException.getMessage());
+            event = null;
+        }
+
+        return event;
+    }
+
     public static String getEventImage(String id) {
         String imageUrl = null;
 
@@ -144,6 +173,7 @@ public class Events {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 event = new Event();
+                event.setId(id);
                 event.setAvailability(resultSet.getInt("availability"));
                 event.setTotal(resultSet.getInt("total"));
             }
@@ -197,6 +227,26 @@ public class Events {
             isUpdated = true;
         } catch (SQLException sqlException) {
             System.err.printf("Error while updating event with the name as %s. %s\n", event.getName(), sqlException.getMessage());
+            isUpdated = false;
+        }
+
+        return isUpdated;
+    }
+
+    public static boolean updateEventSeats(Event event) {
+        boolean isUpdated;
+
+        try(Connection con = DataSource.getConnection()) {
+            String query = "UPDATE events SET availability = ? WHERE id = ?";
+
+            PreparedStatement statement = con.prepareStatement(query);
+            statement.setInt(1, event.getAvailability());
+            statement.setString(2, event.getId());
+            statement.executeUpdate();
+
+            isUpdated = true;
+        } catch (SQLException sqlException) {
+            System.err.printf("Error while updating event avail seats with the id as %s. %s\n", event.getId(), sqlException.getMessage());
             isUpdated = false;
         }
 

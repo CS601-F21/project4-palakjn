@@ -1,0 +1,98 @@
+#tickets .tickets-container {
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    border-width: 0;
+}
+
+#tickets .container-fluid {
+    padding: 2% 20% 0% 20%;
+}
+
+#tickets .active {
+    color: white;
+    background-color: #ff4c68;
+    border-color: #ff4c68;
+    font-family: "Montserrat-Light";
+    font-weight: 900;
+    font-size: 1.4rem;
+}
+
+#tickets .non-active {
+    color: #ff4c68;
+    font-family: "Montserrat-Light";
+    font-weight: 900;
+    font-size: 1.4rem;
+}
+
+#tickets .non-active:hover {
+    color: #ff4c68;
+}
+
+#tickets-container {
+    background-color: #ff4c68;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+#tickets-container .container-fluid{
+    padding: 0;
+}
+
+#tickets .ticket-photo {
+    height: 200px;
+    width: 100%;
+}
+
+#tickets .ticket-card {
+    margin-bottom: 15px;
+    margin-top: 15px;
+}
+
+#tickets .ticket-heading {
+    font-weight: 900;
+    font-family: "Montserrat-Light";
+    color: #ff4c68;
+    font-size: 1.8rem;
+}
+
+#tickets .ticket-subdetails {
+    color: black;
+    display: table-cell;
+    vertical-align: middle;
+    height: 125px;
+    padding-top: 30px;
+    font-weight: bold;
+}
+
+#tickets .ticket-subdetail {
+    padding: 0;
+    margin-bottom: 0;
+}
+
+#tickets .share-ticket {
+    color: #ff4c68;
+}
+
+#tickets .share-ticket:hover {
+    color: #e26477;
+}
+
+#tickets .ticket-body {
+    padding: 0.5rem;
+}
+
+#tickets .ticket-details {
+    padding: 1rem;
+}
+
+#tickets .card-link {
+    position: relative;
+}
+
+#tickets .share-ticket-container {
+    float: right;
+    text-align: right;
+    font-size: 1.8rem;
+    padding-right: 10px;
+    padding-top: 10px;
+}

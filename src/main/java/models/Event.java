@@ -5,6 +5,7 @@ import utilities.Strings;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Event {
@@ -240,5 +241,41 @@ public class Event {
 
     public void setLanguage(String language) {
         this.language = language;
+    }
+
+    public boolean isUpcomingEvent() {
+        boolean isUpcoming = false;
+
+        try {
+            if(!Strings.isNullOrEmpty(this.date)) {
+                Date eventDate = new SimpleDateFormat("yyyy-MM-dd").parse(this.date);
+                Date currentDate = new Date(System.currentTimeMillis());
+                if(eventDate.after(currentDate) || eventDate.equals(currentDate)) {
+                    isUpcoming = true;
+                }
+            }
+        } catch (java.text.ParseException exception) {
+            exception.printStackTrace();
+        }
+
+        return isUpcoming;
+    }
+
+    public boolean isPastEvent() {
+        boolean isPast = false;
+
+        try {
+            if(!Strings.isNullOrEmpty(this.date)) {
+                Date eventDate = new SimpleDateFormat("yyyy-MM-dd").parse(this.date);
+                Date currentDate = new Date(System.currentTimeMillis());
+                if(eventDate.before(currentDate)) {
+                    isPast = true;
+                }
+            }
+        } catch (java.text.ParseException exception) {
+            exception.printStackTrace();
+        }
+
+        return isPast;
     }
 }

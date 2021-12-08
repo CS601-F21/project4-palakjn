@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <div th:replace="common/home :: header"></div>
+</head>
+<body>
+    <section id="heading">
+        <div class="container-fluid">
+            <div th:replace="common/home :: navBar"></div>
+        </div>
+    </section>
+
+    <section id="tickets">
+        <div class="container-fluid">
+            <div class="card tickets-container">
+                <span th:if="${error != null}" style="text-align: center;">
+                    <h3 style="color: #ff2547; font-weight: bold;" th:text="${error}"></h3>
+                </span>
+                <span th:unless="${error != null}">
+                    <div class="card-header">
+                        <ul class="nav nav-tabs card-header-tabs">
+                            <li class="nav-item" th:if="${isNew == true}">
+                                <a class="nav-link active" th:href="@{/tickets/upcomingEvents}">Upcoming Events</a>
+                            </li>
+                            <li class="nav-item" th:if="${isNew == false}">
+                                <a class="nav-link non-active" th:href="@{/tickets/upcomingEvents}">Upcoming Events</a>
+                            </li>
+                            <li class="nav-item" th:if="${isNew == true}">
+                                <a class="nav-link non-active" th:href="@{/tickets/pastEvents}">Past Events</a>
+                            </li>
+                            <li class="nav-item" th:if="${isNew == false}">
+                                <a class="nav-link active" th:href="@{/tickets/pastEvents}">Past Events</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-body" id="tickets-container">
+                        <div class="container-fluid">
+                            <span th:if="${tickets == null}">
+                                <div style="height: 10em;
+                                         display: flex;
+                                         align-items: center;
+                                        justify-content: center;
+                                        color: white;">
+                                  <h2 style="font-family: 'Comic Sans MS';">No Tickets Found</h2>
+                                </div>
+                            </span>
+                            <div class="card ticket-card" th:each="ticket : ${tickets}">
+                                <div class="card-body ticket-body">
+                                    <div class="row">
+                                        <div class="col-lg-4">
+                                            <img th:src= "@{/event-photos/{path} (path=${ticket.event.imageUrl})}" class="ticket-photo" alt="event-photo" />
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <div class="share-ticket-container" th:if="${isNew == true}">
+                                                <a class="share-ticket" href="" data-toggle="modal" th:data-target="${'#' + ticket.id}"><i class="fas fa-share-alt" title="Share the ticket"></i></a>
+                                            </div>
+                                            <div class="ticket-details">
+                                                <a th:href="@{/events/{path} (path = ${ticket.event.id})}" class="ticket-heading" th:text="${ticket.event.name}"></a>
+                                                <div class="ticket-subdetails">
+                                                    <p class="ticket-subdetail"><span th:text="${ticket.event.date}"></span> | <span th:text="${ticket.event.from}"></span></p>
+                                                    <p class="ticket-subdetail" th:text="${ticket.event.place}"></p>
+                                                    <p class="ticket-subdetail">Number of tickets: <span th:text="${ticket.numOfTickets}"></span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="modal fade" th:id="${ticket.id}" tabindex="-1" role="dialog" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" style="color: #ff4c68; font-weight: bold;">Choose the user: </h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+
+                                            <form th:action="@{/tickets/{path}/share (path = ${ticket.id})}" method="post">
+                                                <div class="modal-body" style="text-align: center;">
+                                                    <select class="form-select" aria-label="Default select example" th:each="user : ${users}">
+                                                        <option th:value="${user.id}" th:text="${user.name}"></option>
+                                                    </select>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-light" style="color: #ff4c68; font-weight: bold;">Share</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </span>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
