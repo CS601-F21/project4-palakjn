@@ -89,7 +89,7 @@
                             <label>Phone Number*</label>
                             <div class="row" style="text-align: right;">
                               <div class="col-md-2" style="padding-right: 1px;">
-                                <input type="text" class="form-control" style="text-align: center;" th:field="*{user.countryCode}" th:size="2" th:maxlength="2" pattern="[+]{1}[0-9]{1}" title="Plus followed by one numeric digit" required/>
+                                <input type="text" class="form-control" style="text-align: center;" th:field="*{user.countryCode}" th:size="3" th:maxlength="3" pattern="[+]{1}[0-9]{1,2}" title="Plus followed by one or more numeric digit" required/>
                               </div>
                               <span style="text-align: center; padding-top: 5px;">&nbsp;-&nbsp;</span>
                               <div class="col-md-2"  style="padding-left: 1px; padding-right: 1px;">
@@ -109,7 +109,7 @@
                         <div class="form-row">
                           <div class="col-md-12 mb-3">
                             <label>Upload Image</label>
-                            <input class="form-control" type="file" name="profilePic" />
+                            <input class="form-control" type="file" name="profilePic" accept=".jpeg, .jpg, .png, .tiff, .jfif" />
                           </div>
                         </div>
                         <div id="passwordHelpBlock" class="form-text">
