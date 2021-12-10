@@ -11,7 +11,9 @@ public class Ticket {
     private String eventId;
     private String userId;
     private int numOfTickets;
+    private String hostId;
     private Event event;
+    private String sharedMsg;
 
     /**
      * Get the ticket Id
@@ -70,6 +72,20 @@ public class Ticket {
     }
 
     /**
+     * Get the id of the host
+     */
+    public String getHostId() {
+        return hostId;
+    }
+
+    /**
+     * Set the id of the host of the ticket
+     */
+    public void setHostId(String hostId) {
+        this.hostId = hostId;
+    }
+
+    /**
      * Get the event object
      */
     public Event getEvent() {
@@ -81,5 +97,19 @@ public class Ticket {
      */
     public void setEvent(Event event) {
         this.event = event;
+    }
+
+    /**
+     * Get the shared message
+     */
+    public String getSharedMsg() {
+        return sharedMsg;
+    }
+
+    /**
+     * Set the shared message
+     */
+    public void setSharedMsg(String sharedMsg) {
+        this.sharedMsg = sharedMsg;
     }
 }

@@ -7,7 +7,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * This class holds all the queries being made to the Tickets table.
  *
@@ -24,12 +23,13 @@ public class Tickets {
         boolean isInserted = false;
 
         try(Connection con = DataSource.getConnection()) {
-            String query = "INSERT INTO tickets VALUES (?,?,?,?);";
+            String query = "INSERT INTO tickets VALUES (?,?,?,?,?);";
             PreparedStatement statement = con.prepareStatement(query);
             statement.setString(1, ticket.getId());
             statement.setString(2, ticket.getEventId());
             statement.setString(3, ticket.getUserId());
             statement.setInt(4, ticket.getNumOfTickets());
+            statement.setString(5, ticket.getHostId());
             statement.executeUpdate();
 
             isInserted = true;
@@ -43,20 +43,13 @@ public class Tickets {
     /**
      * Get the tickets for particular user
      * @param userId User Unique Identifier
-     * @param upcoming True if it is a upcoming event else false
      * @return null if error occurs else list of tickets
      */
-    public static List<Ticket> getTickets(String userId, boolean upcoming) {
+    public static List<Ticket> getTickets(String userId) {
         List<Ticket> tickets = new ArrayList<>();
 
         try(Connection con = DataSource.getConnection()) {
-            String query = "SELECT * FROM tickets JOIN events ON tickets.eventId = events.id WHERE tickets.userId = ? AND events.date ";
-
-            if(upcoming) {
-                query += ">= CURDATE();";
-            } else {
-                query += "< CURDATE();";
-            }
+            String query = "SELECT * FROM tickets JOIN events ON tickets.eventId = events.id WHERE tickets.userId = ? AND events.date >= CURDATE();";
 
             PreparedStatement statement = con.prepareStatement(query);
             statement.setString(1, userId);
@@ -67,6 +60,7 @@ public class Tickets {
                 ticket.setEventId(resultSet.getString("eventId"));
                 ticket.setUserId(resultSet.getString("userId"));
                 ticket.setNumOfTickets(resultSet.getInt("numOfTickets"));
+                ticket.setHostId(resultSet.getString("hostId"));
 
                 tickets.add(ticket);
             }
@@ -98,6 +92,7 @@ public class Tickets {
                 ticket.setEventId(resultSet.getString("eventId"));
                 ticket.setUserId(resultSet.getString("userId"));
                 ticket.setNumOfTickets(resultSet.getInt("numOfTickets"));
+                ticket.setHostId(resultSet.getString("hostId"));
             }
         } catch (SQLException sqlException) {
             System.err.printf("Error while getting ticket %s information. %s\n", ticketId, sqlException.getMessage());
@@ -105,6 +100,32 @@ public class Tickets {
         }
 
         return ticket;
+    }
+
+    /**
+     * Updating the existing ticket with the provided number of tickets.
+     * @param ticketId Ticket Unique Identifier
+     * @param numberOfTickets Number of tickets
+     * @return true if successful else false
+     */
+    public static boolean updateTicket(String ticketId, int numberOfTickets) {
+        boolean isupdated = false;
+
+        try(Connection cone = DataSource.getConnection()) {
+            String query = "UPDATE tickets SET numOfTickets = ? WHERE id = ?";
+
+            PreparedStatement statement = cone.prepareStatement(query);
+            statement.setInt(1, numberOfTickets);
+            statement.setString(2, ticketId);
+            statement.executeUpdate();
+
+            isupdated = true;
+        } catch (SQLException sqlException) {
+            System.err.printf("Error while updating the ticket %s information with new number of tickets %s. Error %s.\n", ticketId, numberOfTickets, sqlException);
+            isupdated = false;
+        }
+
+        return isupdated;
     }
 
     /**

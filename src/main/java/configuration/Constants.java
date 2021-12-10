@@ -42,6 +42,10 @@ public class Constants {
 
     public static final String PHOTOS_DIRECTORY = "event-photos";
 
+    public static final String SHARED_BY_STRING = "Shared by %s";
+    public static final String BOUGHT_STRING = "Bought %s tickets";
+    public static final String SHARED_TO_STRING = "Shared %s number of tickets to %s";
+
     //Error messages
     public static class ERROR_MESSAGES {
         public static final String GENERIC = "Oops! Some problem occurred. Try again later!. Contact customer support if problem persist.";

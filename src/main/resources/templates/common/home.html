@@ -15,6 +15,7 @@
         <link rel="stylesheet" th:href="@{/css/event.css}">
         <link rel="stylesheet" th:href="@{/css/profile.css}">
         <link rel="stylesheet" th:href="@{/css/tickets.css}">
+        <link rel="stylesheet" th:href="@{/css/transactions.css}">
 
         <!-- Font Awesome -->
         <script defer th:src="@{https://use.fontawesome.com/releases/v5.15.4/js/all.js}"></script>
@@ -56,6 +57,8 @@
 
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                     <a class="dropdown-item" th:href="@{/profile}">Profile</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" th:href="@{/transactions/upcomingEvents}">Transactions</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" th:href="@{/logout}">Sign Out</a>
                 </div>

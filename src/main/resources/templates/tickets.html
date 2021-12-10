@@ -24,22 +24,6 @@
                     </div>
                 </span>
                 <span>
-                    <div class="card-header">
-                        <ul class="nav nav-tabs card-header-tabs">
-                            <li class="nav-item" th:if="${isNew == true}">
-                                <a class="nav-link active" th:href="@{/tickets/upcomingEvents}">Upcoming Events</a>
-                            </li>
-                            <li class="nav-item" th:if="${isNew == false}">
-                                <a class="nav-link non-active" th:href="@{/tickets/upcomingEvents}">Upcoming Events</a>
-                            </li>
-                            <li class="nav-item" th:if="${isNew == true}">
-                                <a class="nav-link non-active" th:href="@{/tickets/pastEvents}">Past Events</a>
-                            </li>
-                            <li class="nav-item" th:if="${isNew == false}">
-                                <a class="nav-link active" th:href="@{/tickets/pastEvents}">Past Events</a>
-                            </li>
-                        </ul>
-                    </div>
                     <div class="card-body" id="tickets-container">
                         <div class="container-fluid">
                             <span th:if="${tickets == null}">
@@ -63,7 +47,7 @@
                                             </div>
                                         </div>
                                         <div class="col-lg-8">
-                                            <div class="share-ticket-container" th:if="${isNew == true}">
+                                            <div class="share-ticket-container">
                                                 <a class="share-ticket" href="" data-toggle="modal" th:data-target="${'#' + ticket.id}"><i class="fas fa-share-alt" title="Share the ticket"></i></a>
                                             </div>
                                             <div class="ticket-details">
@@ -72,6 +56,7 @@
                                                     <p class="ticket-subdetail"><span th:text="${ticket.event.date}"></span> | <span th:text="${ticket.event.from}"></span></p>
                                                     <p class="ticket-subdetail" th:text="${ticket.event.place}"></p>
                                                     <p class="ticket-subdetail">Number of tickets: <span th:text="${ticket.numOfTickets}"></span></p>
+                                                    <p class="ticket-subdetails" th:if="${ticket.sharedMsg != null}" th:text="${ticket.sharedMsg}"></p>
                                                 </div>
                                             </div>
                                         </div>
@@ -93,6 +78,7 @@
                                                     <select class="form-select" aria-label="Default select example" name="selectedUser">
                                                         <option th:each="user : ${users}" th:value="${user.id}" th:text="${user.name}"></option>
                                                     </select>
+                                                    <input type="number" class="form-control" pattern="[0-9]*" min="1" th:name="numOfTickets" th:max="${ticket.numOfTickets}" required th:default="1" onkeypress="return false"/>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>

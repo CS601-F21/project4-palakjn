@@ -3,8 +3,10 @@ import configuration.Constants;
 import models.ClientInfo;
 import models.Event;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.StringReader;
 import java.util.Base64;
 import java.util.Map;
@@ -152,6 +154,53 @@ public class WebUtilities {
         }
 
         return imageUrl;
+    }
+
+    /**
+     * Responsible for checking if error or success alert needs to be printed on the page
+     * @param model Pass attribute to HTML page when it is rendered
+     * @param request Request object
+     * @param errorKey Key String in html file which will receive the error message if exists
+     * @param successKey Key String in html file which will receive the success message if exists
+     */
+    public static void checksForAlerts(Model model, HttpServletRequest request, String errorKey, String successKey) {
+
+        //Checks if there is an error being propagated by other routes which are being redirected here.
+        checkForErrorAlert(model, request, errorKey);
+
+        //Checks if there is a success being propagated by other routes which are being redirected here.
+        checkForSuccessAlert(model, request, successKey);
+    }
+
+    /**
+     * Responsible for checking if any error alert needs to be printed in the page
+     * @param model Pass attribute to HTML page when it is rendered
+     * @param request Request object
+     * @param errorKey Key String in html file which will receive the error message if exists
+     */
+    public static void checkForErrorAlert(Model model, HttpServletRequest request, String errorKey) {
+
+        Object error = request.getSession().getAttribute(Constants.ERROR_KEY);
+        if(error != null) {
+            model.addAttribute(errorKey, error);
+            //Removing it in order to not do it again.
+            request.getSession().removeAttribute(Constants.ERROR_KEY);
+        }
+    }
+
+    /**
+     * Responsible for checking if any success alert needs to be printed in the page
+     * @param model Pass attribute to HTML page when it is rendered
+     * @param request Request object
+     * @param successKey Key String in html file which will receive the success message if exists
+     */
+    public static void checkForSuccessAlert(Model model, HttpServletRequest request, String successKey) {
+        Object success = request.getSession().getAttribute(Constants.SUCCESS__KEY);
+        if(success != null) {
+            model.addAttribute(successKey, success);
+            //Removing it in order to not do it again.
+            request.getSession().removeAttribute(Constants.SUCCESS__KEY);
+        }
     }
 
     /**

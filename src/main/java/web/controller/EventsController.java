@@ -4,9 +4,11 @@ import configuration.Config;
 import configuration.Constants;
 import controllers.dbManagers.Events;
 import controllers.dbManagers.Tickets;
+import controllers.dbManagers.Transactions;
 import controllers.dbManagers.Users;
 import models.Event;
 import models.Ticket;
+import models.Transaction;
 import models.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -49,21 +51,7 @@ public class EventsController {
             model.addAttribute("userId", userInfo);
             model.addAttribute("event", new Event());
 
-            //Checks if there is an error being propagated by other routes which are being redirected here.
-            Object error = request.getSession().getAttribute(Constants.ERROR_KEY);
-            if(error != null) {
-                model.addAttribute("error", error);
-                //Removing it in order to not do it again.
-                request.getSession().removeAttribute(Constants.ERROR_KEY);
-            }
-
-            //Checks if there is a success being propagated by other routes which are being redirected here.
-            Object success = request.getSession().getAttribute(Constants.SUCCESS__KEY);
-            if(success != null) {
-                model.addAttribute("success", success);
-                //Removing it in order to not do it again.
-                request.getSession().removeAttribute(Constants.SUCCESS__KEY);
-            }
+            WebUtilities.checksForAlerts(model, request, "error", "success");
         }
         else {
             //User is not logged in. Will display all events but will not allow book/edit/delete option
@@ -156,16 +144,8 @@ public class EventsController {
             model.addAttribute("error", Constants.ERROR_MESSAGES.GENERIC);
         }
 
-        Object success = request.getSession().getAttribute(Constants.SUCCESS__KEY);
-        if(success != null) {
-            model.addAttribute("success", success);
-            request.getSession().removeAttribute(Constants.SUCCESS__KEY);
-        }
-        Object error = request.getSession().getAttribute(Constants.ERROR_KEY);
-        if(error != null) {
-            model.addAttribute("error1", error);
-            request.getSession().removeAttribute(Constants.ERROR_KEY);
-        }
+        WebUtilities.checksForAlerts(model, request, "error1", "success");
+
         return "event";
     }
 
@@ -258,7 +238,7 @@ public class EventsController {
      * POST request for booking the event
      */
     @PostMapping("/events/{eventId}/book")
-    public String getEvents(@PathVariable("eventId") String eventId, @RequestParam("numOfTickets") int numOfTickets, Model model, HttpServletRequest request) {
+    public String getEvents(@PathVariable("eventId") String eventId, @RequestParam("numOfTickets") int numOfTickets, HttpServletRequest request) {
         String sessionId = request.getSession(true).getId();
         System.out.printf("Request comes at /events/%s/book route with session id: %s.\n", eventId, sessionId);
 
@@ -268,15 +248,42 @@ public class EventsController {
             return "redirect:/";
         }
 
+        boolean isError = false;
+
+        //Creating new ticket for the user
+        isError = createTicket(eventId, userInfo.toString(), numOfTickets);
+
+        //Creating new transaction for the user
+        if(!isError) {
+            //If error occur while creating a transaction then, keeping the behavior like no reporting error in UI and user will not see any transactions in UI.
+            createTransaction(eventId, userInfo.toString(), numOfTickets);
+        } else {
+            //Redirecting user to event page displaying error message
+            request.getSession().setAttribute(Constants.ERROR_KEY, Constants.ERROR_MESSAGES.EVENT_NOT_BOOKED);
+            return "redirect:/events/" + eventId;
+        }
+
+        //Redirecting user to tickets page
+        return "redirect:/tickets";
+    }
+
+    /**
+     * Creating new ticket object for user bought it
+     * @param eventId Event ID for which the user bought the ticket for
+     * @param userId ID of a user who bought it
+     * @param numOfTickets Number of tickets bought
+     * @return true if successful in creating new ticket else false
+     */
+    private boolean createTicket(String eventId, String userId, int numOfTickets) {
+        boolean isError = false;
+        boolean deleteTicket = false;
+
         //Create ticket object holding tickets information
         Ticket ticket = new Ticket();
         ticket.setId(UUID.randomUUID().toString());
         ticket.setEventId(eventId);
-        ticket.setUserId(userInfo.toString());
+        ticket.setUserId(userId);
         ticket.setNumOfTickets(numOfTickets);
-
-        boolean isError = false;
-        boolean deleteTicket = false;
 
         //Inserting ticket information to table
         boolean isSuccess = Tickets.insert(ticket);
@@ -313,13 +320,31 @@ public class EventsController {
             }
         }
 
-        if(isError) {
-            //Redirecting user to event page displaying error message
-            request.getSession().setAttribute(Constants.ERROR_KEY, Constants.ERROR_MESSAGES.EVENT_NOT_BOOKED);
-            return "redirect:/events/" + eventId;
-        }
+        return isError;
+    }
 
-        //Redirecting user to tickets page
-        return "redirect:/tickets/upcomingEvents";
+    /**
+     * Creating new transaction object for user who bought the ticket
+     * @param eventId Event ID for which the user bought the ticket for
+     * @param userId ID of a user who bought it
+     * @param numOfTickets Number of tickets bought
+     */
+    private void createTransaction(String eventId, String userId, int numOfTickets) {
+
+        //Create transaction object holding tickets information
+        Transaction transaction = new Transaction();
+        transaction.setId(UUID.randomUUID().toString());
+        transaction.setEventId(eventId);
+        transaction.setUserId(userId);
+        transaction.setNumOfTickets(numOfTickets);
+        transaction.setStatus(String.format(Constants.BOUGHT_STRING, numOfTickets));
+
+        //Inserting transaction information to table
+        boolean isSuccess = Transactions.insert(transaction);
+        if(isSuccess) {
+            System.out.printf("Added transaction %s information to table.\n", transaction.getId());
+        } else {
+            System.out.printf("Unable to insert transaction information for event %s.\n", eventId);
+        }
     }
 }

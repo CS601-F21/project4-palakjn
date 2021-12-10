@@ -148,17 +148,15 @@ public class Users {
     }
 
     /**
-     * Get the ID and name of the users other than the user id given
-     * @param userId User unique id
+     * Get the ID and name of all the users
      * @return List of all users' information if found else null
      */
-    public static List<User> getUsersExcept(String userId) {
+    public static List<User> getUsers() {
         List<User> users = new ArrayList<>();
 
         try (Connection con = DataSource.getConnection()) {
-            String query = "SELECT id, name FROM users WHERE id != ?;";
+            String query = "SELECT id, name FROM users;";
             PreparedStatement statement = con.prepareStatement(query);
-            statement.setString(1, userId);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 User user = new User();
@@ -168,7 +166,7 @@ public class Users {
                 users.add(user);
             }
         } catch (SQLException sqlException) {
-            System.err.printf("Error while getting all users information other than %s. %s.\n", userId, sqlException.getMessage());
+            System.err.printf("Error while getting all users information %s.\n", sqlException.getMessage());
             users = null;
         }
 

@@ -8,26 +8,6 @@
     padding: 2% 20% 0% 20%;
 }
 
-#tickets .active {
-    color: white;
-    background-color: #ff4c68;
-    border-color: #ff4c68;
-    font-family: "Montserrat-Light";
-    font-weight: 900;
-    font-size: 1.4rem;
-}
-
-#tickets .non-active {
-    color: #ff4c68;
-    font-family: "Montserrat-Light";
-    font-weight: 900;
-    font-size: 1.4rem;
-}
-
-#tickets .non-active:hover {
-    color: #ff4c68;
-}
-
 #tickets-container {
     background-color: #ff4c68;
     padding-top: 10px;
