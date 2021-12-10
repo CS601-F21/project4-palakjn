@@ -14,9 +14,16 @@
         <div class="container-fluid">
             <div class="card tickets-container">
                 <span th:if="${error != null}" style="text-align: center;">
-                    <h3 style="color: #ff2547; font-weight: bold;" th:text="${error}"></h3>
+                    <div class="d-flex justify-content-center">
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert" style="width: 500px;">
+                            <strong th:text="${error}"></strong>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                        </div>
+                    </div>
                 </span>
-                <span th:unless="${error != null}">
+                <span>
                     <div class="card-header">
                         <ul class="nav nav-tabs card-header-tabs">
                             <li class="nav-item" th:if="${isNew == true}">
@@ -48,7 +55,12 @@
                                 <div class="card-body ticket-body">
                                     <div class="row">
                                         <div class="col-lg-4">
-                                            <img th:src= "@{/event-photos/{path} (path=${ticket.event.imageUrl})}" class="ticket-photo" alt="event-photo" />
+                                            <div th:if="${ticket.event.imageUrl == null}">
+                                                <img th:src="@{/images/default.png}" class="ticket-photo" alt="event-photo" />
+                                            </div>
+                                            <div th:unless="${ticket.event.imageUrl == null}">
+                                                <img th:src= "@{/event-photos/{path} (path=${ticket.event.imageUrl})}" class="ticket-photo" alt="event-photo" />
+                                            </div>
                                         </div>
                                         <div class="col-lg-8">
                                             <div class="share-ticket-container" th:if="${isNew == true}">

@@ -10,8 +10,18 @@ import java.util.Base64;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * This class holds the middleware functionalities of Rest calls.
+ *
+ * @author Palak Jain
+ */
 public class WebUtilities {
 
+    /**
+     * Generate the nounce using session id
+     * @param sessionId Active session Id
+     * @return nounce
+     */
     public static String generateNonce(String sessionId) {
         String sha256hex = DigestUtils.sha256Hex(sessionId);
         return sha256hex;
@@ -91,7 +101,7 @@ public class WebUtilities {
     public static ClientInfo verifyTokenResponse(Map<String, Object> map, String sessionId) {
         // verify ok: true
         if(!map.containsKey(Constants.OK_KEY) || !(boolean)map.get(Constants.OK_KEY)) {
-            //TODO: log the error
+            System.out.printf("Got false response from slack. %s.\n", map);
             return null;
         }
 
@@ -99,7 +109,8 @@ public class WebUtilities {
         if(!map.containsKey(Constants.STATE_KEY) || !map.get(Constants.STATE_KEY).equals(sessionId)) {
             System.out.println(map.get(Constants.STATE_KEY));
             System.out.println(sessionId);
-            //TODO: log the reason
+
+            System.out.printf("Current session id %s is not equal to the session id %s received from slack.\n", sessionId, map.getOrDefault(Constants.STATE_KEY, null));
             return null;
         }
 
@@ -111,7 +122,7 @@ public class WebUtilities {
         String expectedNonce = generateNonce(sessionId);
         String actualNonce = (String) payloadMap.get(Constants.NONCE_KEY);
         if(!expectedNonce.equals(actualNonce)) {
-            //TODO: log the reason
+            System.out.printf("Expected nounce %s is different from the one received from slack i.e. %s.\n", expectedNonce, actualNonce);
             return null;
         }
 
@@ -119,6 +130,12 @@ public class WebUtilities {
         return new ClientInfo((String) payloadMap.get(Constants.NAME_KEY), (String) payloadMap.get(Constants.EMAIL_KEY));
     }
 
+    /**
+     * Download the file in a directory
+     * @param file Multipart file
+     * @param uniqueId file name
+     * @return
+     */
     public static String downloadImage(MultipartFile file, String uniqueId) {
         String imageUrl = null;
 
@@ -137,12 +154,24 @@ public class WebUtilities {
         return imageUrl;
     }
 
-    private static String getFileName(String eventId, String fileName) {
+    /**
+     * Create the file name with the passes unique id and with the extension of the original file name.
+     * @param uniqueId
+     * @param fileName
+     * @return
+     */
+    private static String getFileName(String uniqueId, String fileName) {
         String extension = getExtension(fileName).isPresent() ? getExtension(fileName).get() : ".png";
-        return String.format("%s.%s", eventId, extension);
+        return String.format("%s.%s", uniqueId, extension);
     }
 
-    //https://www.baeldung.com/java-file-extension
+    /**
+     * Gets the extension of file name
+     *
+     * Ref: https://www.baeldung.com/java-file-extension
+     * @param filename
+     * @return
+     */
     private static Optional<String> getExtension(String filename) {
         return Optional.ofNullable(filename)
                 .filter(f -> f.contains("."))

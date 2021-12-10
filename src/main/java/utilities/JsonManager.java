@@ -5,6 +5,11 @@ import com.google.gson.JsonSyntaxException;
 
 import java.io.Reader;
 
+/**
+ * Serialize and deserialize objects
+ *
+ * @author Palak Jain
+ */
 public class JsonManager {
     /**
      * Parse JSON string into an object

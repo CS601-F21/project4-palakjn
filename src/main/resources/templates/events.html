@@ -18,6 +18,29 @@
 
     <section id="events">
         <div class="container-fluid">
+
+            <span th:if="${error != null}" >
+                <div class="d-flex justify-content-center">
+                    <div class="alert alert-danger alert-dismissible fade show text-center" role="alert" style="width: 500px;">
+                        <strong th:text="${error}"></strong>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                    </div>
+                </div>
+            </span>
+
+            <span th:if="${success != null}" >
+                <div class="d-flex justify-content-center">
+                    <div class="alert alert-success alert-dismissible fade show text-center" role="alert" style="width: 500px;">
+                        <strong th:text="${success}"></strong>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                    </div>
+                </div>
+            </span>
+
             <!-- https://stackoverflow.com/questions/33106391/how-to-check-if-list-is-empty-using-thymeleaf >-->
             <!--https://www.baeldung.com/spring-thymeleaf-conditionals-->
             <span th:if="${userId != null and not #lists.isEmpty(events)}">

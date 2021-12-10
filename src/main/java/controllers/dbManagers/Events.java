@@ -9,8 +9,18 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class holds all the queries being made to the Events table.
+ *
+ * @author Palak Jain
+ */
 public class Events {
 
+    /**
+     * Insert event details to the table.
+     * @param event Class holding event information
+     * @return True if inserted else false
+     */
     public static boolean insert(Event event) {
         boolean isInserted = false;
         Time from = getTime(event.getFrom());
@@ -48,6 +58,10 @@ public class Events {
         return isInserted;
     }
 
+    /**
+     * Get all the events from the table
+     * @return Null if got some error while retrieving else list of events
+     */
     public static List<Event> getEvents() {
         List<Event> allEvents = new ArrayList<>();
 
@@ -80,6 +94,11 @@ public class Events {
         return allEvents;
     }
 
+    /**
+     * Get the particular event information from the table.
+     * @param id Event Unique ID
+     * @return null if got some error while retrieving else the event object.
+     */
     public static Event getEvent(String id) {
         Event event = null;
 
@@ -115,35 +134,11 @@ public class Events {
         return event;
     }
 
-    public static Event getEventForTicket(String id) {
-        Event event = null;
-
-        try(Connection con = DataSource.getConnection()) {
-            String query = "SELECT imageUrl, name, address, city, state, country, zip, date, fromTime FROM events WHERE id = ?;";
-            PreparedStatement statement = con.prepareStatement(query);
-            statement.setString(1, id);
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                event = new Event(id,
-                        resultSet.getString("name"),
-                        resultSet.getDate("date").toString(),
-                        resultSet.getTime("fromTime").toString(),
-                        0);
-                event.setImageUrl(resultSet.getString("imageUrl"));
-                event.setAddress(resultSet.getString("address"));
-                event.setCity(resultSet.getString("city"));
-                event.setState(resultSet.getString("state"));
-                event.setCountry(resultSet.getString("country"));
-                event.setZip(resultSet.getString("zip"));
-            }
-        } catch (SQLException sqlException) {
-            System.err.printf("Error while getting %s event information from the table. %s\n", id, sqlException.getMessage());
-            event = null;
-        }
-
-        return event;
-    }
-
+    /**
+     * Get the image associated with the particular event.
+     * @param id Event Unique Identifier
+     * @return image URL - Value can be null
+     */
     public static String getEventImage(String id) {
         String imageUrl = null;
 
@@ -163,6 +158,11 @@ public class Events {
         return imageUrl;
     }
 
+    /**
+     * Get the particular event availability and total seats
+     * @param id Event Unique Identifier
+     * @return event object - Can be null if got error while retrieving data
+     */
     public static Event getEventSeats(String id) {
         Event event = null;
 
@@ -185,6 +185,12 @@ public class Events {
         return event;
     }
 
+    /**
+     * Update event information
+     * @param event Event object holding values to update
+     * @param withImage true if updating imageURL else false
+     * @return true if successful else false.
+     */
     public static boolean updateEvent(Event event, boolean withImage) {
         boolean isUpdated;
         Time from = getTime(event.getFrom());
@@ -233,6 +239,11 @@ public class Events {
         return isUpdated;
     }
 
+    /**
+     * Updating new availability of seats for a particular event
+     * @param event Event object with new availability details
+     * @return true if successful else false
+     */
     public static boolean updateEventSeats(Event event) {
         boolean isUpdated;
 
@@ -253,6 +264,11 @@ public class Events {
         return isUpdated;
     }
 
+    /**
+     * Deleting event information from events table
+     * @param id Event Unique Identifier
+     * @return true if successful else false
+     */
     public static boolean deleteEvent(String id) {
         boolean isDeleted = false;
 
@@ -270,6 +286,9 @@ public class Events {
         return isDeleted;
     }
 
+    /**
+     * Get the time in a particular format
+     */
     private static Time getTime(String time) {
         Time from = null;
 

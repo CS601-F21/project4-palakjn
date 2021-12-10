@@ -10,30 +10,19 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Map;
 
+/**
+ * Handles the calls being made to third party APIs
+ *
+ * @author Palak Jain
+ */
 public class ServiceHandler {
 
-    public static String send(String url, Constants.METHOD method, Map<String, String> headers, String body) {
-        if(method == Constants.METHOD.GET) {
-            return doGet(url, headers);
-        }
-        else if(method == Constants.METHOD.POST) {
-            return doPost(url, headers, body);
-        }
-
-        return null;
-    }
-
-    public static String send(String url, Constants.METHOD method, Map<String, String> headers) {
-        if(method == Constants.METHOD.GET) {
-            return doGet(url, headers);
-        }
-        else if(method == Constants.METHOD.POST) {
-            return doPost(url, headers);
-        }
-
-        return null;
-    }
-
+    /**
+     * Makes a mentioned method call to the specified URL.
+     * @param url URL of the resource which wants to seek
+     * @param method Method like POST, GET, PUT, etc
+     * @return response from the call in String
+     */
     public static String send(String url, Constants.METHOD method) {
         if(method == Constants.METHOD.GET) {
             return doGet(url);
@@ -78,10 +67,11 @@ public class ServiceHandler {
         }
     }
 
-    private static String doPost(String url, Map<String, String> headers) {
-        return doPost(url, headers, null);
-    }
-
+    /**
+     *
+     * @param url
+     * @return
+     */
     private static String doPost(String url) {
         return doPost(url, null, null);
     }

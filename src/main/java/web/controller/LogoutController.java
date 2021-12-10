@@ -6,9 +6,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * A web controller containing routes for logout page
+ *
+ * @author Palak Jain
+ */
 @Controller
 public class LogoutController {
 
+    /**
+     * Handles GET request for sign out the user.
+     */
     @GetMapping("/logout")
     public String dashboard(HttpServletRequest request) {
         String sessionId = request.getSession(true).getId();

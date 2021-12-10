@@ -9,9 +9,18 @@ import utilities.WebUtilities;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * A web controller containing routes for home page
+ *
+ * @author Palak Jain
+ */
 @Controller
 public class HomeController {
 
+    /**
+     * Handles Get request for rendering application home page.
+     * This is the first page which user will see once using it.
+     */
     @GetMapping("/")
     public String index(Model model, HttpServletRequest request) {
         // retrieve the ID of this session
@@ -19,9 +28,21 @@ public class HomeController {
         System.out.printf("Request comes at / route with session id: %s\n", sessionId);
 
         Object clientInfoObj = request.getSession().getAttribute(Constants.CLIENT_USER_ID);
-        if(clientInfoObj != null) {
+        Object errorMessage = request.getSession().getAttribute(Constants.ERROR_KEY);
+
+        if(clientInfoObj !=  null && errorMessage == null) {
             System.out.printf("Client with session ID %s already exists.\n", sessionId);
             return "redirect:/dashboard";
+        } else if(errorMessage != null) {
+
+            //If got an error from another page. Will display it as an error in UI
+            model.addAttribute("error", errorMessage);
+            request.getSession().removeAttribute(Constants.ERROR_KEY);
+
+            if(clientInfoObj != null) {
+                //Logout the user as some error occurred
+                request.getSession().invalidate();
+            }
         }
 
         String nonce = WebUtilities.generateNonce(sessionId);

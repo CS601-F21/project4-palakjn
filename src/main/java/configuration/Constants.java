@@ -1,5 +1,10 @@
 package configuration;
 
+/**
+ * The class holding constant values. If there is a change in hardcoded strings, there will be only one place to change it.
+ *
+ * @author Palak Jain
+ */
 public class Constants {
 
     public static final String HOST = "slack.com";
@@ -18,6 +23,8 @@ public class Constants {
     public static final String OK_KEY = "ok";
 
     public static final String CLIENT_USER_ID = "client_info_key";
+    public static final String ERROR_KEY = "error";
+    public static final String SUCCESS__KEY = "success";
     public static final String CLIENT_ID = "clientId";
     public static final String CLIENT_SECRET = "clientSecret";
     public static final String REDIRECT_URL = "redirectUrl";
@@ -36,5 +43,19 @@ public class Constants {
     public static final String PHOTOS_DIRECTORY = "event-photos";
 
     //Error messages
-    public static final String ERROR_MESSAGE = "Oops! Some problem occurred. Try again later!. Contact customer support if problem persist.";
+    public static class ERROR_MESSAGES {
+        public static final String GENERIC = "Oops! Some problem occurred. Try again later!. Contact customer support if problem persist.";
+        public static final String EVENT_NOT_CREATED = "Unable to create event. Try Again Later!";
+        public static final String EVENT_NOT_UPDATED = "Unable to update event. Try Again Later!";
+        public static final String EVENT_NOT_DELETED = "Unable to delete event. Try Again Later!";
+        public static final String EVENT_NOT_BOOKED = "Unable to book an event. Try Again Later!";
+        public static final String TICKET_NOT_SENT = "Unable to send ticket. Try Again Later!";
+    }
+
+    //Success messages
+    public static class SUCCESS_MESSAGES {
+        public static final String EVENT_CREATED = "Created New Event";
+        public static final String EVENT_UPDATED = "Updated the Event";
+        public static final String EVENT_DELETED = "Deleted the Event";
+    }
 }

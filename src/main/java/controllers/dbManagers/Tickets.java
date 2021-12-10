@@ -1,15 +1,25 @@
 package controllers.dbManagers;
 
 import controllers.DataSource;
-import models.Event;
 import models.Ticket;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * This class holds all the queries being made to the Tickets table.
+ *
+ * @author Palak Jain
+ */
 public class Tickets {
 
+    /**
+     * Insert ticket details to the table
+     * @param ticket Ticket object with the values
+     * @return true if successful else false
+     */
     public static boolean insert(Ticket ticket) {
         boolean isInserted = false;
 
@@ -30,6 +40,12 @@ public class Tickets {
         return isInserted;
     }
 
+    /**
+     * Get the tickets for particular user
+     * @param userId User Unique Identifier
+     * @param upcoming True if it is a upcoming event else false
+     * @return null if error occurs else list of tickets
+     */
     public static List<Ticket> getTickets(String userId, boolean upcoming) {
         List<Ticket> tickets = new ArrayList<>();
 
@@ -62,6 +78,11 @@ public class Tickets {
         return tickets;
     }
 
+    /**
+     * Get the ticket by Id
+     * @param ticketId Ticket Unique Identifier
+     * @return ticket object if found else null
+     */
     public static Ticket getTicket(String ticketId) {
         Ticket ticket = null;
 
@@ -84,5 +105,27 @@ public class Tickets {
         }
 
         return ticket;
+    }
+
+    /**
+     * Delete the ticket by Id
+     * @param ticketId Ticket Unique identifier
+     * @return truse if successful else false
+     */
+    public static boolean deleteTicket(String ticketId) {
+        boolean isDeleted = false;
+
+        try(Connection con = DataSource.getConnection()) {
+            String query = "DELETE FROM tickets WHERE id = ?";
+            PreparedStatement statement = con.prepareStatement(query);
+            statement.setString(1, ticketId);
+            statement.executeUpdate();
+
+            isDeleted = true;
+        } catch (SQLException sqlException) {
+            System.err.printf("Error while deleting an ticket with id as %s. %s.\n", ticketId, sqlException.getMessage());
+        }
+
+        return isDeleted;
     }
 }

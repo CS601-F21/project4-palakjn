@@ -12,6 +12,11 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Map;
 
+/**
+ * A Web application which maintains all the user-created events and will allow user to buy and share tickets.
+ *
+ * @author Palak Jain
+ */
 @SpringBootApplication
 public class EventServer {
 
@@ -57,6 +62,10 @@ public class EventServer {
         return configFileLocation;
     }
 
+    /**
+     * Read configuration file
+     * @param configFilename file location
+     */
     private void readConfig(String configFilename) {
         try {
             Map<String, String> values = JsonManager.fromJson(new FileReader(configFilename), Map.class);
@@ -73,6 +82,10 @@ public class EventServer {
         }
     }
 
+    /**
+     * Verifies if the values inside a config is valid or not
+     * @return true if it is valid else false
+     */
     private boolean verifyConfig() {
         boolean isValid = false;
 

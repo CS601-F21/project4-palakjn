@@ -1,5 +1,10 @@
 package models;
 
+/**
+ * Holds the information of user after authentication from Slack
+ *
+ * @author Palak Jain
+ */
 public class ClientInfo {
     private String email;
     private String name;

@@ -7,8 +7,20 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class holds all the queries being made to the Users table.
+ *
+ * @author Palak Jain
+ */
 public class Users {
 
+    /**
+     * Insert the user information
+     * @param id User unique identifier
+     * @param email User email address
+     * @param name User name
+     * @return true if successful else false
+     */
     public static boolean insertUser(String id, String email, String name) {
         boolean isInserted = false;
         try (Connection con = DataSource.getConnection()) {
@@ -27,6 +39,12 @@ public class Users {
         return isInserted;
     }
 
+    /**
+     * Get the user Unique Identifier by email.
+     * Along with user id, email id is also unique per user.
+     * @param email User email address
+     * @return UniqueID if found else null
+     */
     public static String getUserId(String email) {
         String userId = null;
 
@@ -45,6 +63,11 @@ public class Users {
         return userId;
     }
 
+    /**
+     * Get the user display name by id
+     * @param userId User unique id
+     * @return not-null value if found else null
+     */
     public static String getUserName(String userId) {
         String name = null;
 
@@ -63,6 +86,11 @@ public class Users {
         return name;
     }
 
+    /**
+     * Get few user details like id, name, imageUrl, phone by id
+     * @param userId user unique identifier
+     * @return user object if found else null
+     */
     public static User getUserInfo(String userId) {
         User user = new User();
 
@@ -85,6 +113,11 @@ public class Users {
         return user;
     }
 
+    /**
+     * Get all the details of one user by Id
+     * @param userId User Unique Identifier
+     * @return User object if found else null
+     */
     public static User getUserProfile(String userId) {
         User user = new User();
 
@@ -114,6 +147,11 @@ public class Users {
         return user;
     }
 
+    /**
+     * Get the ID and name of the users other than the user id given
+     * @param userId User unique id
+     * @return List of all users' information if found else null
+     */
     public static List<User> getUsersExcept(String userId) {
         List<User> users = new ArrayList<>();
 
@@ -137,6 +175,12 @@ public class Users {
         return users;
     }
 
+    /**
+     * Updating user information
+     * @param user User details which wants to ber updated
+     * @param withPhoto true if wants to update image else false
+     * @return true if successful else false
+     */
     public static boolean updateUser(User user, boolean withPhoto) {
         boolean isUpdated = false;
 

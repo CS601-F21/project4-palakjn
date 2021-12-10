@@ -15,9 +15,17 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * A web controller containing routes for login page
+ *
+ * @author Palak Jain
+ */
 @Controller
 public class LoginController {
 
+    /**
+     * Handles GET request to verify if the request received from Slack authorizes the user.
+     */
     @GetMapping("/login")
     public String login(Model model, HttpServletRequest request) {
         // retrieve the ID of this session
@@ -46,7 +54,7 @@ public class LoginController {
 
         if(clientInfo == null) {
             System.out.println("Oops! Login Unsuccessful");
-            //TODO: find a way to report an error to front page
+            request.getSession().setAttribute(Constants.ERROR_KEY, Constants.ERROR_MESSAGES.GENERIC);
             return "redirect:/";
         }
         else {
@@ -57,7 +65,7 @@ public class LoginController {
                 boolean isInserted = Users.insertUser(userId, clientInfo.getEmail(), clientInfo.getName());
                 if(!isInserted) {
                     System.out.println("Some error while inserting into users table.");
-                    //TODO: find a way to report an error to front page
+                    request.getSession().setAttribute(Constants.ERROR_KEY, Constants.ERROR_MESSAGES.GENERIC);
                     return "redirect:/";
                 }
             }

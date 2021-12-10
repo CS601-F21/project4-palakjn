@@ -15,12 +15,40 @@
             </span>
         </div>
     </section>
-    <span th:if="${message != null}"}>
-        <div class="container-fluid error-container">
-            <p class="text-muted" th:text="${message}"></p>
-        </div>
-    </span>
-    <span th:unless="${message != null}">
+
+    <div class="container-fluid error-container">
+        <span th:if="${error != null}"}>
+            <div class="d-flex justify-content-center">
+                <div class="alert alert-danger alert-dismissible fade show text-center" role="alert" style="width: 500px;">
+                    <strong th:text="${error}"></strong>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                </div>
+            </div>
+        </span>
+        <span th:if="${error1 != null}"}>
+            <div class="d-flex justify-content-center">
+                <div class="alert alert-danger alert-dismissible fade show text-center" role="alert" style="width: 500px;">
+                    <strong th:text="${error1}"></strong>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                </div>
+            </div>
+        </span>
+        <span th:if="${success != null}" >
+            <div class="d-flex justify-content-center">
+                <div class="alert alert-success alert-dismissible fade show text-center" role="alert" style="width: 500px;">
+                    <strong th:text="${success}"></strong>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                </div>
+            </div>
+        </span>
+    </div>
+    <span th:unless="${error != null}">
         <section id="event-heading">
             <div class="container-fluid">
                 <div class="event-border">
@@ -50,7 +78,7 @@
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                             <a class="dropdown-item" data-toggle="modal" data-target="#askUserInfo" role="button">Edit</a>
                                             <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" th:href="@{/events/delete/{path} (path=${event.id})}">Delete</a>
+                                            <a class="dropdown-item" th:href="@{/events/{path}/delete (path=${event.id})}">Delete</a>
                                         </div>
                                     </div>
 
@@ -263,5 +291,19 @@
 
     <span th:if="${userId != null}"><div style="height:400px; width:100%; clear:both;"></div></span>
     <span th:if="${userId == null}"><div th:replace="common/index :: foot"></div></span>
+
+    <script th:inline="javascript">
+        //Resource: https://newbedev.com/how-to-keep-footer-at-the-bottom-even-with-dynamic-height-website
+
+        $(document).ready(function() {
+            var docHeight = $(window).height();
+            var footerHeight = $('#footer').height();
+            var footerTop = $('#footer').position().top + footerHeight;
+
+            if (footerTop < docHeight) {
+                $('#footer').css('margin-top', 10+ (docHeight - footerTop) + 'px');
+            }
+        });
+    </script>
 </body>
 </html>

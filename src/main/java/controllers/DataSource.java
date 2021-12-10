@@ -5,6 +5,11 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+/**
+ * Maintains the connection pool.
+ *
+ * @author Palak Jain
+ */
 public class DataSource {
     private static BasicDataSource ds;
 
@@ -21,7 +26,6 @@ public class DataSource {
 
     /**
      * Return a Connection from the pool.
-     * @return
      * @throws SQLException
      */
     public static Connection getConnection() throws SQLException {

@@ -15,9 +15,17 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * A web controller containing routes for tickets page
+ *
+ * @author Palak Jain
+ */
 @Controller
 public class TicketController {
 
+    /**
+     * Handle GET request for displaying tickets for upcoming events.
+     */
     @GetMapping("/tickets/upcomingEvents")
     public String upcomingEvents(Model model, HttpServletRequest request) {
         String sessionId = request.getSession(true).getId();
@@ -26,6 +34,9 @@ public class TicketController {
         return getEvents(model, request, true);
     }
 
+    /**
+     * Handle GET request for displaying tickets for past events.
+     */
     @GetMapping("/tickets/pastEvents")
     public String pastEvents(Model model, HttpServletRequest request) {
         String sessionId = request.getSession(true).getId();
@@ -34,6 +45,9 @@ public class TicketController {
         return getEvents(model, request, false);
     }
 
+    /**
+     * Get events based on whether it is upcoming event or a past one.
+     */
     private String getEvents(Model model, HttpServletRequest request, boolean isNew) {
         Object userInfo = request.getSession().getAttribute(Constants.CLIENT_USER_ID);
         if(userInfo == null) {
@@ -57,22 +71,30 @@ public class TicketController {
                         model.addAttribute("tickets", tickets);
                         model.addAttribute("error", null);
                     } else {
-                        model.addAttribute("error", "Internal Server Error. Try Again Later. Contact admin if the problem persists.");
+                        model.addAttribute("error", Constants.ERROR_MESSAGES.GENERIC);
                     }
                 } else {
-                    model.addAttribute("error", "Internal Server Error. Try Again Later. Contact admin if the problem persists.");
+                    model.addAttribute("error", Constants.ERROR_MESSAGES.GENERIC);
                 }
             }
         } else {
-            model.addAttribute("error", "Internal Server Error. Try Again Later. Contact admin if the problem persists.");
+            model.addAttribute("error", Constants.ERROR_MESSAGES.GENERIC);
+        }
+
+        Object error = request.getSession().getAttribute(Constants.ERROR_KEY);
+        if(error != null) {
+            model.addAttribute("error", error);
+
+            request.getSession().removeAttribute(Constants.ERROR_KEY);
         }
 
         model.addAttribute("isNew", isNew);
         return "tickets";
-
-
     }
 
+    /**
+     * Handled POST request for sharing the ticket to another user
+     */
     @PostMapping("/tickets/{ticketId}/share")
     public String upcomingEvents(@PathVariable("ticketId") String ticketId, @RequestParam("selectedUser") String userId, Model model, HttpServletRequest request) {
         String sessionId = request.getSession(true).getId();
@@ -94,8 +116,11 @@ public class TicketController {
             if(isSuccess) {
                 System.out.printf("Added ticket %s information to table.\n", ticket.getId());
             } else {
-                //TODO: Handle the error
+                System.out.printf("unable to add ticket %s information to table.\n", ticket.getId());
+                request.getSession().setAttribute(Constants.ERROR_KEY, Constants.ERROR_MESSAGES.GENERIC);
             }
+        } else {
+            request.getSession().setAttribute(Constants.ERROR_KEY, Constants.ERROR_MESSAGES.TICKET_NOT_SENT);
         }
 
         return "redirect:/tickets/upcomingEvents";
