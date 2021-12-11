@@ -40,7 +40,7 @@
     display: table-cell;
     vertical-align: middle;
     height: 125px;
-    padding-top: 30px;
+    padding-top: 20px;
     font-weight: bold;
 }
 
@@ -51,6 +51,7 @@
 
 #tickets .share-ticket {
     color: #ff4c68;
+    cursor: pointer;
 }
 
 #tickets .share-ticket:hover {
@@ -75,4 +76,20 @@
     font-size: 1.8rem;
     padding-right: 10px;
     padding-top: 10px;
+}
+
+#tickets .barcode-photo {
+    border-radius: 100%;
+    border-style: solid;
+    border-color: #ff4c68;
+    height: 160px;
+    border-width: thick;
+}
+
+#tickets .ticket-image-container {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 90%;
+    transform: translate(-50%, -50%);
 }

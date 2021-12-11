@@ -19,6 +19,8 @@ import utilities.Strings;
 import utilities.WebUtilities;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 
@@ -284,6 +286,7 @@ public class EventsController {
         ticket.setEventId(eventId);
         ticket.setUserId(userId);
         ticket.setNumOfTickets(numOfTickets);
+        ticket.setHostId(userId);
 
         //Inserting ticket information to table
         boolean isSuccess = Tickets.insert(ticket);
@@ -337,7 +340,8 @@ public class EventsController {
         transaction.setEventId(eventId);
         transaction.setUserId(userId);
         transaction.setNumOfTickets(numOfTickets);
-        transaction.setStatus(String.format(Constants.BOUGHT_STRING, numOfTickets));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
+        transaction.setStatus(String.format(Constants.BOUGHT_STRING, numOfTickets, LocalDate.now().format(formatter)));
 
         //Inserting transaction information to table
         boolean isSuccess = Transactions.insert(transaction);

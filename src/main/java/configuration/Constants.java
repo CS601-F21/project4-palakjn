@@ -43,8 +43,8 @@ public class Constants {
     public static final String PHOTOS_DIRECTORY = "event-photos";
 
     public static final String SHARED_BY_STRING = "Shared by %s";
-    public static final String BOUGHT_STRING = "Bought %s tickets";
-    public static final String SHARED_TO_STRING = "Shared %s number of tickets to %s";
+    public static final String BOUGHT_STRING = "Bought %s tickets on %s";
+    public static final String SHARED_TO_STRING = "Shared %s %s to %s on %s";
 
     //Error messages
     public static class ERROR_MESSAGES {
@@ -61,5 +61,6 @@ public class Constants {
         public static final String EVENT_CREATED = "Created New Event";
         public static final String EVENT_UPDATED = "Updated the Event";
         public static final String EVENT_DELETED = "Deleted the Event";
+        public static final String TICKET_SENT = "Send";
     }
 }

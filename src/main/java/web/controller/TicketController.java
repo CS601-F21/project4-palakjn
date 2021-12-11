@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import utilities.WebUtilities;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 
@@ -55,10 +57,11 @@ public class TicketController {
                     if(users != null) {
                         User currentUser = getUser(users, userInfo.toString());
                         User sharedByUser = getUser(users, ticket.getHostId());
-                        if(currentUser != null && sharedByUser != null && !ticket.getHostId().equals(userInfo.toString())) {
-                            //If the ticket is being shared by another user then, displaying the name Who shared the ticket in UI
-
-                            ticket.setSharedMsg(String.format(Constants.SHARED_BY_STRING, sharedByUser.getName()));
+                        if(currentUser != null) {
+                            if(sharedByUser != null && !ticket.getHostId().equals(userInfo.toString())) {
+                                //If the ticket is being shared by another user then, displaying the name Who shared the ticket in UI
+                                ticket.setSharedMsg(String.format(Constants.SHARED_BY_STRING, sharedByUser.getName()));
+                            }
 
                             //Removing current user so that it will not get displayed in UI
                             users.remove(currentUser);
@@ -76,7 +79,7 @@ public class TicketController {
             model.addAttribute("error", Constants.ERROR_MESSAGES.GENERIC);
         }
 
-        WebUtilities.checkForErrorAlert(model, request, "error");
+        WebUtilities.checksForAlerts(model, request, "error", "success");
 
         return "tickets";
     }
@@ -110,7 +113,7 @@ public class TicketController {
 
             if(numOfTickets == currentTicket.getNumOfTickets()) {
                 //Deleting the ticket from the user's ticket collection who originally bought it
-                isError = Tickets.deleteTicket(currentTicket.getId()); //If got an error while deleting the ticket then, will not let ticket to be shared to another user
+                isError = !Tickets.deleteTicket(currentTicket.getId()); //If got an error while deleting the ticket then, will not let ticket to be shared to another user
             } else {
                 //Updating the current ticket with left number of tickets
                 boolean isUpdated = Tickets.updateTicket(currentTicket.getId(), currentTicket.getNumOfTickets() - numOfTickets);
@@ -131,6 +134,7 @@ public class TicketController {
             boolean isSuccess = Tickets.insert(newTicket);
             if(isSuccess) {
                 System.out.printf("Added ticket %s information to table.\n", newTicket.getId());
+                request.getSession().setAttribute(Constants.SUCCESS__KEY, Constants.SUCCESS_MESSAGES.TICKET_SENT);
 
                 //Adding new transaction to the current user stating that user has shared this number of tickets to another user
                 Transaction transaction = new Transaction();
@@ -138,7 +142,8 @@ public class TicketController {
                 transaction.setNumOfTickets(numOfTickets);
                 transaction.setUserId(userInfo.toString());
                 transaction.setEventId(currentTicket.getEventId());
-                transaction.setStatus(String.format(Constants.SHARED_TO_STRING, numOfTickets, Users.getUserName(userId)));
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
+                transaction.setStatus(String.format(Constants.SHARED_TO_STRING, numOfTickets, numOfTickets == 1 ? "ticket" : "tickets", Users.getUserName(userId), LocalDate.now().format(formatter)));
 
                 if(Transactions.insert(transaction)) { //If got an error while adding new transaction then, I will simply ignore it. Impact will be that user will not see the new transaction
                     System.out.printf("Added new transaction by user %s.\n", userInfo.toString());

@@ -65,11 +65,14 @@
                                         <div class="col-lg-8">
                                             <div class="transaction-details">
                                                 <a th:href="@{/events/{path} (path = ${transaction.event.id})}" class="transaction-heading" th:text="${transaction.event.name}"></a>
-                                                <div class="transaction-subdetails">
-                                                    <p class="transaction-subdetail"><span th:text="${transaction.event.date}"></span> | <span th:text="${transaction.event.from}"></span></p>
-                                                    <p class="transaction-subdetail" th:text="${transaction.event.place}"></p>
-                                                    <p class="transaction-subdetail">Number of tickets: <span th:text="${transaction.numOfTickets}"></span></p>
-                                                    <p class="transaction-subdetail" th:text="${transaction.status}"></p>
+                                               <div class="row transaction-subdetails">
+                                                   <div class="col-lg-6">
+                                                       <p class="transaction-subdetail"><span th:text="${transaction.event.date}"></span> | <span th:text="${transaction.event.from}"></span></p>
+                                                       <p class="transaction-subdetail" th:text="${transaction.event.place}"></p>
+                                                   </div>
+                                                   <div class="col-lg-6" style="text-align: center;">
+                                                        <p class="transaction-subdetail" th:text="${transaction.status}" style="padding-top: 10px; font-size: 1.8rem; font-family: 'Montserrat-Light'; color: #ff4c68;"></p>
+                                                   </div>
                                                 </div>
                                             </div>
                                         </div>

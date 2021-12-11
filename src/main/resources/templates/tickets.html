@@ -23,6 +23,16 @@
                         </div>
                     </div>
                 </span>
+                <span th:if="${success != null}" >
+                    <div class="d-flex justify-content-center">
+                        <div class="alert alert-success alert-dismissible fade show text-center" role="alert" style="width: 500px;">
+                            <strong th:text="${success}"></strong>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                        </div>
+                    </div>
+                </span>
                 <span>
                     <div class="card-body" id="tickets-container">
                         <div class="container-fluid">
@@ -39,24 +49,29 @@
                                 <div class="card-body ticket-body">
                                     <div class="row">
                                         <div class="col-lg-4">
-                                            <div th:if="${ticket.event.imageUrl == null}">
+                                            <div th:if="${ticket.event.imageUrl == null}" class="ticket-image-container">
                                                 <img th:src="@{/images/default.png}" class="ticket-photo" alt="event-photo" />
                                             </div>
-                                            <div th:unless="${ticket.event.imageUrl == null}">
+                                            <div th:unless="${ticket.event.imageUrl == null}" class="ticket-image-container">
                                                 <img th:src= "@{/event-photos/{path} (path=${ticket.event.imageUrl})}" class="ticket-photo" alt="event-photo" />
                                             </div>
                                         </div>
                                         <div class="col-lg-8">
                                             <div class="share-ticket-container">
-                                                <a class="share-ticket" href="" data-toggle="modal" th:data-target="${'#' + ticket.id}"><i class="fas fa-share-alt" title="Share the ticket"></i></a>
+                                                <a class="share-ticket" data-toggle="modal" th:data-target="${'#' + ticket.id}"><i class="fas fa-share-alt" title="Share the ticket"></i></a>
                                             </div>
-                                            <div class="ticket-details">
-                                                <a th:href="@{/events/{path} (path = ${ticket.event.id})}" class="ticket-heading" th:text="${ticket.event.name}"></a>
-                                                <div class="ticket-subdetails">
-                                                    <p class="ticket-subdetail"><span th:text="${ticket.event.date}"></span> | <span th:text="${ticket.event.from}"></span></p>
-                                                    <p class="ticket-subdetail" th:text="${ticket.event.place}"></p>
-                                                    <p class="ticket-subdetail">Number of tickets: <span th:text="${ticket.numOfTickets}"></span></p>
-                                                    <p class="ticket-subdetails" th:if="${ticket.sharedMsg != null}" th:text="${ticket.sharedMsg}"></p>
+                                            <div class="row ticket-details">
+                                                <div class="col-lg-6">
+                                                    <a th:href="@{/events/{path} (path = ${ticket.event.id})}" class="ticket-heading" th:text="${ticket.event.name}"></a>
+                                                    <div class="ticket-subdetails">
+                                                        <p class="ticket-subdetail"><span th:text="${ticket.event.date}"></span> | <span th:text="${ticket.event.from}"></span></p>
+                                                        <p class="ticket-subdetail" th:text="${ticket.event.place}"></p>
+                                                        <p class="ticket-subdetail">Number of seats: <span th:text="${ticket.numOfTickets}"></span></p>
+                                                        <p class="ticket-subdetail" th:if="${ticket.sharedMsg != null}" th:text="'-' + ${ticket.sharedMsg}" style="color: #ff4c68; font-size: 22px; font-weight: bold; text-align: right;"></p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6 text-center">
+                                                    <a data-toggle="modal" data-target="#showBarcode"><img th:src="@{/images/barcode.png}" class="barcode-photo" alt="barcode" /></a>
                                                 </div>
                                             </div>
                                         </div>
@@ -74,17 +89,38 @@
                                             </div>
 
                                             <form th:action="@{/tickets/{path}/share (path = ${ticket.id})}" method="post">
-                                                <div class="modal-body" style="text-align: center;">
-                                                    <select class="form-select" aria-label="Default select example" name="selectedUser">
-                                                        <option th:each="user : ${users}" th:value="${user.id}" th:text="${user.name}"></option>
-                                                    </select>
-                                                    <input type="number" class="form-control" pattern="[0-9]*" min="1" th:name="numOfTickets" th:max="${ticket.numOfTickets}" required th:default="1" onkeypress="return false"/>
+                                                <div class="modal-body">
+                                                    <div class="row">
+                                                        <div class="col-lg-4">
+                                                            <label for="selectUser">Select the User: </label>
+                                                        </div>
+                                                        <div class="col-lg-8">
+                                                            <select class="form-select" id="selectUser" aria-label="Default select example" name="selectedUser">
+                                                               <option th:each="user : ${users}" th:value="${user.id}" th:text="${user.name}"></option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-lg-4" style="padding-top: 20px;">
+                                                             <label for="numOfTickets">Number of tickets:</label>
+                                                        </div>
+                                                        <div class="col-lg-8" style="padding-top: 20px;">
+                                                             <input type="number" class="form-control" pattern="[0-9]*" min="1" id="numOfTickets" name="numOfTickets" th:max="${ticket.numOfTickets}" required="" onkeypress="return false" default="default">
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
                                                     <button type="submit" class="btn btn-light" style="color: #ff4c68; font-weight: bold;">Share</button>
                                                 </div>
                                             </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal fade" id="showBarcode" tabindex="-1" role="dialog" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-body">
+                                            <img th:src="@{/images/barcode.png}" alt="barcode" />
                                         </div>
                                     </div>
                                 </div>

@@ -57,9 +57,6 @@
 
 #transactions .transaction-subdetails {
     color: black;
-    display: table-cell;
-    vertical-align: middle;
-    height: 125px;
     padding-top: 30px;
     font-weight: bold;
 }
