@@ -129,9 +129,31 @@ public class Tickets {
     }
 
     /**
+     * Delete the ticket by EventId
+     * @param eventId Event UniqueID
+     * @return true if successful else false
+     */
+    public static boolean deleteTicketByEventId(String eventId) {
+        boolean isDeleted = false;
+
+        try(Connection con = DataSource.getConnection()) {
+            String query = "DELETE FROM tickets WHERE eventId = ?";
+            PreparedStatement statement = con.prepareStatement(query);
+            statement.setString(1, eventId);
+            statement.executeUpdate();
+
+            isDeleted = true;
+        } catch (SQLException sqlException) {
+            System.err.printf("Error while deleting an ticket with EventId as %s. %s.\n", eventId, sqlException.getMessage());
+        }
+
+        return isDeleted;
+    }
+
+    /**
      * Delete the ticket by Id
      * @param ticketId Ticket Unique identifier
-     * @return truse if successful else false
+     * @return true if successful else false
      */
     public static boolean deleteTicket(String ticketId) {
         boolean isDeleted = false;

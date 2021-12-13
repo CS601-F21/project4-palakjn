@@ -213,21 +213,41 @@ public class EventsController {
         //First getting the image url from storage
         String imageUrl = Events.getEventImage(eventId);
 
-        //Deleting the event from the database
-        boolean isDeleted = Events.deleteEvent(eventId);
+        //Deleting the tickets first being bought
+        boolean isDeleted = Tickets.deleteTicketByEventId(eventId);
 
         if(isDeleted) {
-            //If deleted then, going to delete image file if locally stored.
-            System.out.printf("Deleted event: %s.\n", eventId);
+            //If deleted then, going to delete all the transactions information
+            System.out.printf("Deleted all the tickets bought for the event: %s.\n", eventId);
 
-            if(!Strings.isNullOrEmpty(imageUrl)) {
-                if(FileStorage.deleteFile(Constants.PHOTOS_DIRECTORY, imageUrl)) {
-                    System.out.printf("%s/%s deleted successfully.\n", Constants.PHOTOS_DIRECTORY, imageUrl);
+            //If deleted then deleting the transaction
+            isDeleted = Transactions.deleteTransaction(eventId);
+
+            if(isDeleted) {
+                //If deleted then, going to delete the event information
+                System.out.printf("Deleted all the transactions made on the event: %s.\n", eventId);
+
+                //Deleting the event from the database
+                isDeleted = Events.deleteEvent(eventId);
+
+                if(isDeleted) {
+                    //If deleted then, going to delete image file if locally stored.
+                    System.out.printf("Deleted event: %s.\n", eventId);
+
+                    if(!Strings.isNullOrEmpty(imageUrl)) {
+                        if(FileStorage.deleteFile(Constants.PHOTOS_DIRECTORY, imageUrl)) {
+                            System.out.printf("%s/%s deleted successfully.\n", Constants.PHOTOS_DIRECTORY, imageUrl);
+                        } else {
+                            System.out.printf("%s/%s Unable to delete file.\n", Constants.PHOTOS_DIRECTORY, imageUrl);
+                        }
+
+                        request.getSession().setAttribute(Constants.SUCCESS__KEY, Constants.SUCCESS_MESSAGES.EVENT_DELETED);
+                    }
                 } else {
-                    System.out.printf("%s/%s Unable to delete file.\n", Constants.PHOTOS_DIRECTORY, imageUrl);
+                    request.getSession().setAttribute(Constants.ERROR_KEY, Constants.ERROR_MESSAGES.EVENT_NOT_DELETED);
                 }
-
-                request.getSession().setAttribute(Constants.SUCCESS__KEY, Constants.SUCCESS_MESSAGES.EVENT_DELETED);
+            } else {
+                request.getSession().setAttribute(Constants.ERROR_KEY, Constants.ERROR_MESSAGES.EVENT_NOT_DELETED);
             }
         } else {
             request.getSession().setAttribute(Constants.ERROR_KEY, Constants.ERROR_MESSAGES.EVENT_NOT_DELETED);

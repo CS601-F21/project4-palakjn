@@ -113,22 +113,22 @@ public class Transactions {
     }
 
     /**
-     * Delete the transaction by Id
-     * @param transactionId Transaction Unique identifier
+     * Delete the transaction by Event Id
+     * @param eventId Event Unique identifier
      * @return true if successful else false
      */
-    public static boolean deleteTicket(String transactionId) {
+    public static boolean deleteTransaction(String eventId) {
         boolean isDeleted = false;
 
         try(Connection con = DataSource.getConnection()) {
-            String query = "DELETE FROM transactions WHERE id = ?";
+            String query = "DELETE FROM transactions WHERE eventId = ?";
             PreparedStatement statement = con.prepareStatement(query);
-            statement.setString(1, transactionId);
+            statement.setString(1, eventId);
             statement.executeUpdate();
 
             isDeleted = true;
         } catch (SQLException sqlException) {
-            System.err.printf("Error while deleting an transaction with id as %s. %s.\n", transactionId, sqlException.getMessage());
+            System.err.printf("Error while deleting an transaction with eventId as %s. %s.\n", eventId, sqlException.getMessage());
         }
 
         return isDeleted;
